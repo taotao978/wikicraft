@@ -1449,6 +1449,7 @@ define([
 
             //保存页面
             $scope.cmd_savepage = function (cb, errcb) {//{{{
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "保存"]);
                 if (!isEmptyObject(currentPage)) {//修改
                     var _currentPage = currentPage;    // 防止保存过程中 currentPage变量被修改导致保存错误
                     savePageContent(function () {

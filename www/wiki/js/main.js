@@ -180,6 +180,14 @@
 			});
 		});
 	});
+
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?fdb58bea35f4d248278fc390d1f0fe2a";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
 })(window);
 
 
