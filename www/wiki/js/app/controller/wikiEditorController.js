@@ -1339,6 +1339,7 @@ define([
 
 
             $scope.openWikiBlock = function () {//{{{
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "模块"]);
                 function formatWikiCmd(text) {
                     var lines = text.split('\n');
                     var startPos = undefined, endPos = undefined;
@@ -1392,6 +1393,7 @@ define([
             }//}}}
 
             $scope.openGitFile = function () {//{{{
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "打开git文件"]);
                 if (!currentPage || !currentPage.url) {
                     return;
                 }
@@ -1410,6 +1412,7 @@ define([
             }//}}}
 
             $scope.cmd_newpage = function (hidePageTree, url, event) {//{{{
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "新建页"]);
 				if (hidePageTree && !treeNodeMap[url]) {
 					return;
 				}
@@ -1677,6 +1680,7 @@ define([
 
             //撤销
             $scope.cmd_undo = function () { //{{{
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "撤销"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView('undo');
                     return;
@@ -1687,6 +1691,7 @@ define([
 
             //重做
             $scope.cmd_redo = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "重做"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView('redo');
                     return;
@@ -1697,18 +1702,21 @@ define([
 
             //查找
             $scope.cmd_find = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "查找"]);
                 editor.execCommand("find");
                 CodeMirror.commands.find(editor);
             }
 
             //替换
             $scope.cmd_replace = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "替换"]);
                 editor.execCommand("replace");
                 CodeMirror.commands.replace(editor);
             }
 
             //标题    H1：Hn
             $scope.cmd_headline = function (level) {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "标题"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView("formatblock", 'H' + level);
                     return;
@@ -1760,6 +1768,7 @@ define([
 
             //加粗
             $scope.cmd_bold = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "加粗"]);
                 //console.log(isHTMLViewEditor);
                 if (isHTMLViewEditor) {
                     formatHtmlView('bold');
@@ -1770,6 +1779,7 @@ define([
 
             //斜体
             $scope.cmd_italic = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "斜体"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView('italic');
                     return;
@@ -1814,6 +1824,7 @@ define([
 
             //有序列表
             $scope.cmd_listol = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "有序列表"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView('insertorderedlist');
                     return;
@@ -1864,6 +1875,7 @@ define([
 
             //无序列表
             $scope.cmd_listul = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "无序列表"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView('insertunorderedlist');
                     return;
@@ -1873,6 +1885,7 @@ define([
 
             //引用内容
             $scope.cmd_blockqote = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "引用内容"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView('formatblock', 'blockquote');
                     return;
@@ -1883,6 +1896,7 @@ define([
 
             //表格
             $scope.cmd_tabel = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "表格"]);
                 $uibModal.open({
                     templateUrl: config.htmlPath + "editorInsertTable.html",
                     controller: "tableCtrl",
@@ -1943,6 +1957,7 @@ define([
 
             //水平分割线
             $scope.cmd_horizontal = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "水平分割线"]);
                 var cursor = editor.getCursor();
                 editor.replaceRange('---\n', CodeMirror.Pos(cursor.line + 1, 0), CodeMirror.Pos(cursor.line + 1, 0));
                 editor.setCursor(CodeMirror.Pos(cursor.line + 2, 0));
@@ -1951,6 +1966,7 @@ define([
 
             //链接
             $scope.cmd_link = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "链接"]);
                 $uibModal.open({
                     templateUrl: config.htmlPath + "editorInsertLink.html",
                     controller: "linkCtrl",
@@ -1986,6 +2002,7 @@ define([
 
             //图片
             $scope.cmd_image = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "图片"]);
                 $uibModal.open({
                     templateUrl: config.htmlPath + "editorInsertImg.html",
                     controller: "imgCtrl",
@@ -2046,6 +2063,7 @@ define([
 
             // 大文件
             $scope.cmd_bigfile = function () {
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "大文件"]);
 				//return ;
                 modal('controller/bigfileController', {
                     controller: 'bigfileController',
@@ -2151,6 +2169,7 @@ define([
 
             //代码
             $scope.cmd_code = function () {//{{{
+                _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "代码"]);
                 if (isHTMLViewEditor) {
                     formatHtmlView('formatblock', 'pre');
                     return;
@@ -3051,10 +3070,12 @@ define([
                 });
 
                 $('.toolbar-page-version').on('click', function () {
+                    _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "版本"]);
                     $scope.cmd_version();
                 });
 
                 $('.toolbar-page-hotkey').on('click', function () {
+                    _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "热键"]);
                     console.log('toolbar-page-hotkey');
                     $('#hotkeyModal').modal({
                         keyboard: true
@@ -3062,6 +3083,7 @@ define([
                 });
 
                 $('.toolbar-page-knowledge').on('click', function () {
+                    _hmt.push(['_trackEvent', "编辑器工具栏", "点击", "知识库"]);
                     console.log('toolbar-page-knowledge');
                     util.go("knowledge");
                 });
