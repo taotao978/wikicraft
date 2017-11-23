@@ -10,6 +10,7 @@ define([
     function registerController(wikiblock) {
         app.registerController('companyCarouselController',['$scope', function ($scope) {
             $scope.imgsPath = config.wikiModPath + 'wiki/assets/imgs/';
+            wikiblock.modParams.carouselId = "carousel" + Math.floor((Math.random() * 99 + 1));
             $scope.modParams = angular.copy(wikiblock.modParams || {});
         }]);
     }

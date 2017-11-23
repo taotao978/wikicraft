@@ -54,6 +54,33 @@
     .game-rules .rule-content{
         padding-left: 65px;
     }
+    @media(max-width: 768px){
+        .game-rules h1 {
+            font-size: 24px;
+            margin: 10px 0;
+            padding-bottom: 10px;
+        }
+        .game-rules p{
+            font-size: 14px;
+        }
+        .game-rules .rule{
+            margin-bottom: 10px;
+        }
+        .game-rules .rule-content{
+            padding-left: 50px;
+        }
+        .game-rules .serial{
+            font-size: 20px;
+            width: 40px;
+            margin-right: 0;
+            padding-top: 5px;
+        }
+        .game-rules .serial:before{
+            height: 40px;
+            right: 15px;
+            top: 10px;
+        }
+    }
 </style>
 <div ng-controller="gameRulesController">
     <div class="game-rules container" ng-show="modParams.moduleKind=='game'">

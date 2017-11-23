@@ -91,13 +91,61 @@
     .companyNews .top-news .text{
         padding-left: 210px;
     }
+    @media(max-width: 768px){
+        .companyNews{
+            margin: 0;
+        }
+        .companyNews .container{
+            padding: 0;
+        }
+        .companyNews .main-content{
+            padding-left: 0;
+        }
+        .companyNews h2{
+            font-size: 28px;
+        }
+        .companyNews .img-text{
+            padding: 10px;
+        }
+        .companyNews .img-text h4{
+            margin-bottom: 10px;
+        }
+        .companyNews .img-text .text{
+            padding-left: 90px;
+        }
+        .companyNews .top-news{
+            padding: 10px 15px;
+        }
+        .companyNews .top-news img{
+            width: 80px;
+            height: 65px;
+        }
+        .companyNews .top-news .text{
+            padding-left: 90px;
+        }
+        .companyNews .sidebar{
+            width: 100%;
+            height: auto;
+            padding: 15px;
+        }
+        .companyNews .sidebar h1{
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .companyNews .sidebar a.btn{
+            right: 15px;
+            left: auto;
+            top: 15px;
+            bottom: auto;
+        }
+    }
 </style>
 <div class="companyNews" ng-controller="companyNewsController">
     <div class="container">
         <div class="sidebar pull-left">
             <h1>{{modParams.columnName}}</h1>
             <p class="column-info">{{modParams.columnInfo}}</p>
-            <a href="{{modParams.moreNewsLink}}" class="btn" target="_blank">更多></a>
+            <a href="{{modParams.moreNewsLink}}" ng-show="modParams.moreNewsLink" class="btn" target="_blank">更多></a>
         </div>
         <div class="main-content">
             <div class="top-news img-text clearfix">
