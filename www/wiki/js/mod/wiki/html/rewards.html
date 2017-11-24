@@ -37,12 +37,28 @@
         font-size: 14px;
         color: #999;
     }
+    @media(max-width: 768px){
+        .game-rewards{
+            margin-bottom: 15px;
+        }
+        .game-rewards h1{
+            margin-bottom: 0;
+            padding-bottom: 10px;
+            font-size: 24px;
+        }
+        .game-rewards h2{
+            font-size: 18px;
+        }
+        .game-rewards h2 span{
+            font-size: 14px;
+        }
+    }
 </style>
 <div ng-controller="rewardsController">
-    <div class="game-rewards container" ng-show="modParams.moduleKind=='game'">
+    <div class="game-rewards container clearfix" ng-show="modParams.moduleKind=='game'">
         <h1 class="title">{{modParams.title}}</h1>
         <div class="rewards-container">
-            <div class="reward col-md-3 col-xs-12" ng-repeat="reward in modParams.rewards">
+            <div class="reward col-md-3 col-xs-6" ng-repeat="reward in modParams.rewards">
                 <h2>{{reward.title}} <span>{{reward.num}}</span> </h2>
                 <p class="info">{{reward.describe}}</p>
                 <img ng-src="{{reward.imgUrl || getImageUrl('game_rewards1.jpg', imgsPath)}}" alt="">

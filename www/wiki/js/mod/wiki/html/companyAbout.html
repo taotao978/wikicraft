@@ -43,6 +43,36 @@
         font-size: 16px;
         line-height: 27px;
     }
+    @media(max-width: 768px){
+        .companyAbout{
+            margin: 0;
+        }
+        .companyAbout .container{
+            padding: 0;
+        }
+        .companyAbout .col-sm-6{
+            max-height: unset;
+            padding: 0;
+        }
+        .companyAbout img{
+            height: 150px;
+        }
+        .companyAbout h1{
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .companyAbout h1 span{
+            font-size: 14px;
+        }
+        .companyAbout h1 a.btn{
+            font-size: 12px;
+            padding: 3px 10px;
+        }
+        .companyAbout p{
+            font-size: 14px;
+            padding: 0 15px;
+        }
+    }
 </style>
 <div class="companyAbout" ng-controller="companyAboutController">
     <div class="container">
@@ -52,7 +82,7 @@
         <div class="col-sm-6 content-box">
             <h1>{{modParams.columnName}}
                 <span class="info">{{modParams.columnInfo}}</span>
-                <a class="btn pull-right" href="{{modParams.moreNewsLink}}" target="_blank">了解详情></a>
+                <a class="btn pull-right" href="{{modParams.moreNewsLink}}" ng-show="modParams.moreNewsLink" target="_blank">了解详情></a>
             </h1>
             <div class="content">
                 <p ng-repeat="paragraph in modParams.paragraphs">{{paragraph}}</p>

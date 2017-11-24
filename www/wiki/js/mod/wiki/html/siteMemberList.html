@@ -96,6 +96,31 @@
     .game-members .member-item{
         float: left;
     }
+    .game-members .member-item .profile{
+        width: 103px; 
+        height: 103px;
+    }
+    @media(max-width: 768px){
+        .game-members{
+            margin-bottom: 15px;
+        }
+        .game-members .members{
+            margin: 0;
+        }
+        .game-members .member-item{
+            width: 25%;
+            padding: 0;
+            font-size: 12px;
+        }
+        .game-members .member-item .profile{
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+        }
+        .game-members h1{
+            font-size: 24px;
+        }
+    }
 </style>
 
 <div ng-controller="siteMemberListController">
@@ -149,8 +174,8 @@
                 </div>
                 <div class="members">
                     <div class="member-item" ng-repeat="member in modParams.memberList | limitTo:modParams.step:((modParams.nowPage-1)*modParams.step)">
-                        <img ng-src="{{member.userLogo || imgsPath+'game_userProfile.jpg'}}" style="width: 103px; height: 103px;" alt="">
-                        <p>{{member.username}}<span class="info pull-right">{{member.roleName || "成员"}}</span></p>
+                        <img class="profile" ng-src="{{member.userLogo || imgsPath+'game_userProfile.jpg'}}" alt="">
+                        <p>{{member.username}}<span class="info pull-right hidden-xs">{{member.roleName || "成员"}}</span></p>
                     </div>
                 </div>
             </div>
