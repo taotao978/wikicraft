@@ -26,3 +26,5 @@ Run.bat
 
 npl_packages/
 start.bat
+
+node_modules/

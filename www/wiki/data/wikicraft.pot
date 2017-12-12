@@ -1,0 +1,2350 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+
+#: www/wiki/html/browers.html:30
+msgid "! 出错啦"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:411
+msgid "* 分组名称仅支持英文、数字"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:420
+msgid "* 可同时添加多名成员，用户名之间以英文半角逗号(,)隔开"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:378
+msgid "* 您还不是VIP，不能更改项目类型"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:356
+msgid "* 您还不是VIP，不能设置cname"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:305
+#: www/wiki/html/newWebsite.html:380
+msgid "*可使用小写字母、数字（例如：mysite123）"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:371
+msgid "*权限管理按照从严原则，如果一个账号同时存在于几个权限分组，则按照最严格计算。"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:373
+msgid "*网站拥有者不受分组配置影响"
+msgstr ""
+
+#: www/wiki/html/license.html:18
+msgid "1.特别提示"
+msgstr ""
+
+#: www/wiki/html/license.html:107
+msgid "10. 协议修改"
+msgstr ""
+
+#: www/wiki/html/license.html:112
+msgid "11. 通知送达"
+msgstr ""
+
+#: www/wiki/html/license.html:117
+msgid "12. 法律管辖"
+msgstr ""
+
+#: www/wiki/html/license.html:122
+msgid "13. 其他规定"
+msgstr ""
+
+#: www/wiki/html/license.html:24
+msgid "2.服务说明"
+msgstr ""
+
+#: www/wiki/html/license.html:30
+msgid "3. 服务变更、中断或终止"
+msgstr ""
+
+#: www/wiki/html/services.html:249
+#: www/wiki/html/vip.html:204
+msgid "30RMB/月"
+msgstr ""
+
+#: www/wiki/html/browers.html:37
+msgid "360浏览器"
+msgstr ""
+
+#: www/wiki/html/license.html:44
+msgid "4. 使用规则"
+msgstr ""
+
+#: www/wiki/html/license.html:65
+msgid "5. 一人一网管理规定"
+msgstr ""
+
+#: www/wiki/html/pay.html:541
+msgid "5秒钟后将返回..."
+msgstr ""
+
+#: www/wiki/html/license.html:71
+msgid "6. 知识产权"
+msgstr ""
+
+#: www/wiki/html/license.html:76
+msgid "7. 隐私保护"
+msgstr ""
+
+#: www/wiki/html/license.html:89
+msgid "8. 免责声明"
+msgstr ""
+
+#: www/wiki/html/license.html:102
+msgid "9. 违约赔偿"
+msgstr ""
+
+#: www/wiki/html/footer.html:125
+msgid ""
+"<div class=\"dropdown-menu\">\r\n"
+"                        <div class=\"dropdown-item\" href=\"javascript:;\" ng-click=\"translationUse('zh-cn')\" translate=\"BUTTON_LANG_CN\"></div>\r\n"
+"                        <div class=\"dropdown-item\" href=\"javascript:;\" ng-click=\"translationUse('en')\" translate=\"BUTTON_LANG_EN\"></div>\r\n"
+"                    </div>"
+msgstr ""
+
+#: www/wiki/html/footer.html:134
+msgid "BUTTON_LANG_CN"
+msgstr ""
+
+#: www/wiki/html/footer.html:135
+msgid "BUTTON_LANG_EN"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:350
+msgid "Cname转发："
+msgstr ""
+
+#: www/wiki/html/userProfile.html:676
+msgid "Github绑定："
+msgstr ""
+
+#: www/wiki/html/githubAuth.html:5
+msgid "Github认证"
+msgstr ""
+
+#: www/wiki/html/header.html:437
+msgid "HEADER_ACTIVITIES_TIP"
+msgstr ""
+
+#: www/wiki/html/apps.html:199
+msgid "KeepWork应用中心"
+msgstr ""
+
+#: www/wiki/html/home.html:456
+msgid "KeepWork是一个集成了众多创作工具的个人作品创作与分享平台。 学生、老师、企业可以用它制作网站，3D动画和应用软件; 并与成千上万的用户一起学习和创作。 我们致力研发免费易用的面向个人的创作工具和提供持久可靠的数据存储服务。"
+msgstr ""
+
+#: www/wiki/html/home.html:514
+msgid "KeepWork是什么？"
+msgstr ""
+
+#: www/wiki/html/pay.html:466
+msgid "Keepwork 账号："
+msgstr ""
+
+#: www/wiki/html/oauth.html:85
+msgid "Keepwork快速安全登录"
+msgstr ""
+
+#: www/wiki/html/license.html:15
+msgid "Keepwork用户协议"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:649
+msgid "QQ绑定："
+msgstr ""
+
+#: www/wiki/html/home.html:545
+msgid "VIP包月"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:307
+#: www/wiki/html/newWebsite.html:382
+msgid "VIP可在网站设置中设置cname转发"
+msgstr ""
+
+#: www/wiki/html/myVIP.html:17
+msgid "VIP特权功能开发中，敬请期待！"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:121
+msgid "VIP的额外经验好处"
+msgstr ""
+
+#: www/wiki/html/services.html:248
+#: www/wiki/html/vip.html:203
+msgid "VIP账号"
+msgstr ""
+
+#: www/wiki/html/vip.html:184
+msgid "VIP账号特权"
+msgstr ""
+
+#: www/wiki/html/vip.html:220
+msgid "VIP购买付费"
+msgstr ""
+
+#: www/wiki/html/wikiBlock.html:213
+msgid "WIKI模块"
+msgstr ""
+
+#: www/wiki/html/services.html:242
+#: www/wiki/html/services.html:257
+#: www/wiki/html/vip.html:197
+#: www/wiki/html/vip.html:212
+msgid "cname 转发"
+msgstr ""
+
+#: www/wiki/html/header.html:527
+#: www/wiki/html/header.html:541
+msgid "paracraft"
+msgstr ""
+
+#: www/wiki/html/join.html:149
+#: www/wiki/html/join.html:211
+msgid "《KeepWork用户协议》"
+msgstr ""
+
+#: www/wiki/html/home.html:454
+msgid "一网乾坤 个人作品网"
+msgstr ""
+
+#: www/wiki/html/editorNewPage.html:270
+#: www/wiki/html/newWebsite.html:332
+#: www/wiki/html/newWebsite.html:407
+msgid "上一步"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:582
+msgid "上传失败"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:386
+msgid "上传文件"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:282
+msgid "上标"
+msgstr ""
+
+#: www/wiki/html/editorNewPage.html:269
+msgid "下一步"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:257
+msgid "下划线"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:283
+msgid "下标"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:543
+msgid "下载选中"
+msgstr ""
+
+#: www/wiki/html/license.html:54
+msgid "不得为任何非法目的而使用网络服务系统；"
+msgstr ""
+
+#: www/wiki/html/license.html:55
+msgid "不得以任何形式使用大富网络网络服务侵犯大富网络的商业利益，包括并不限于发布非经大富网络许可的商业广告；"
+msgstr ""
+
+#: www/wiki/html/license.html:58
+msgid "不得侵犯其他任何第三方的专利权、著作权、商标权、名誉权或其他任何合法权益；"
+msgstr ""
+
+#: www/wiki/html/license.html:57
+msgid "不得利用大富网络提供的网络服务上传、展示或传播任何虚假的、骚扰性的、中伤他人的、辱骂性的、恐吓性的、庸俗淫秽的或其他任何非法的信息资料；"
+msgstr ""
+
+#: www/wiki/html/license.html:59
+msgid "不得利用大富网络网络服务系统进行任何不利于大富网络的行为；"
+msgstr ""
+
+#: www/wiki/html/license.html:56
+msgid "不得利用大富网络网络服务系统进行任何可能对互联网或移动网正常运转造成不利影响的行为；"
+msgstr ""
+
+#: www/wiki/html/vip.html:224
+msgid "个"
+msgstr ""
+
+#: www/wiki/html/license.html:49
+msgid "个人在大富网络/一人一网中创建、存储的公开的数据，可以以URL的形式被其他用户在在大富网络/一人一网中进行引用。"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:563
+msgid "个人简介字数超过限制。"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:554
+msgid "个人简介："
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:224
+msgid "临时的项目"
+msgstr ""
+
+#: www/wiki/html/license.html:83
+msgid "为维护大富网络的合法权益。"
+msgstr ""
+
+#: www/wiki/html/license.html:82
+msgid "为维护社会公众的利益；"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:561
+msgid "也可将上传的文件拖拽到此"
+msgstr ""
+
+#: www/wiki/html/apps.html:230
+msgid "了解开放平台"
+msgstr ""
+
+#: www/wiki/html/license.html:79
+msgid "事先获得用户的明确授权；"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:137
+#: www/wiki/html/wikiEditor.html:293
+msgid "代码"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:32
+#: www/wiki/html/header.html:398
+msgid "会员等级说明"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:562
+msgid "位置字数超过限制。"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:539
+msgid "位置："
+msgstr ""
+
+#: www/wiki/html/services.html:171
+msgid "余额"
+msgstr ""
+
+#: www/wiki/html/header.html:430
+#: www/wiki/html/userProfile.html:702
+msgid "作品"
+msgstr ""
+
+#: www/wiki/html/worksApply.html:3
+msgid "作品申请"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:730
+msgid "作者"
+msgstr ""
+
+#: www/wiki/html/user.html:448
+msgid "作者："
+msgstr ""
+
+#: www/wiki/html/footer.html:178
+msgid "你将要投诉的是#username#发布的#url#"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:42
+msgid "你将重置#username#的密码。"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:372
+msgid "例如：某用户同时存在于“编辑”权限与“禁止访问”权限的2个组，则会禁止访问。"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:564
+msgid "保 存"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:309
+#: www/wiki/html/editWebsite.html:327
+#: www/wiki/html/wikiEditor.html:278
+#: www/wiki/html/wikiEditor.html:30
+msgid "保存"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:534
+msgid "保密"
+msgstr ""
+
+#: www/wiki/html/license.html:77
+msgid "保护用户隐私是大富网络的一项基本政策，大富网络保证不对外公开或向第三方提供单个用户的注册资料及用户在使用网络服务时存储在大富网络的非公开内容，但下列情况除外："
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:311
+#: www/wiki/html/newWebsite.html:386
+msgid "信息确认："
+msgstr ""
+
+#: www/wiki/html/userProfile.html:615
+msgid "修 改"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:77
+#: www/wiki/html/userProfile.html:976
+msgid "修改"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:502
+msgid "修改头像"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:579
+msgid "修改密码"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:591
+msgid "修改密码表单"
+msgstr ""
+
+#: www/wiki/html/pay.html:476
+#: www/wiki/html/pay.html:530
+#: www/wiki/html/services.html:171
+msgid "元"
+msgstr ""
+
+#: www/wiki/html/pay.html:470
+msgid "充值到数字账号："
+msgstr ""
+
+#: www/wiki/html/pay.html:474
+msgid "充值金额："
+msgstr ""
+
+#: www/wiki/html/services.html:234
+#: www/wiki/html/vip.html:189
+msgid "免费"
+msgstr ""
+
+#: www/wiki/html/services.html:236
+#: www/wiki/html/services.html:251
+#: www/wiki/html/vip.html:191
+#: www/wiki/html/vip.html:206
+msgid "免费创建网站"
+msgstr ""
+
+#: www/wiki/html/services.html:233
+#: www/wiki/html/vip.html:188
+msgid "免费账户"
+msgstr ""
+
+#: www/wiki/html/home.html:536
+msgid "免费：任意数量、大小，CDN加速"
+msgstr ""
+
+#: www/wiki/html/pay.html:480
+msgid "兑换魔豆："
+msgstr ""
+
+#: www/wiki/html/bigfile.html:540
+#: www/wiki/html/oauth.html:104
+#: www/wiki/html/wikiEditor.html:256
+msgid "全选"
+msgstr ""
+
+#: www/wiki/html/wikiBlock.html:244
+msgid "全部"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:271
+msgid "全部替换"
+msgstr ""
+
+#: www/wiki/html/home.html:535
+msgid "公开网站"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:380
+msgid "公有项目"
+msgstr ""
+
+#: www/wiki/html/search.html:205
+#: www/wiki/html/search.html:222
+#: www/wiki/html/search.html:240
+msgid "共"
+msgstr ""
+
+#: www/wiki/html/fans.html:59
+msgid "关 注"
+msgstr ""
+
+#: www/wiki/html/header.html:427
+#: www/wiki/html/header.html:449
+#: www/wiki/html/user.html:347
+#: www/wiki/html/user.html:370
+#: www/wiki/html/user.html:390
+#: www/wiki/html/user.html:455
+#: www/wiki/html/user.html:475
+#: www/wiki/html/userProfile.html:699
+#: www/wiki/html/userProfile.html:761
+#: www/wiki/html/userProfile.html:794
+#: www/wiki/html/userProfile.html:832
+#: www/wiki/html/wikiBlock.html:238
+msgid "关注"
+msgstr ""
+
+#: www/wiki/html/user.html:442
+msgid "关注的作者"
+msgstr ""
+
+#: www/wiki/html/user.html:462
+msgid "关注的网站"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:415
+msgid "其它"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:551
+msgid "出错了，请稍后重试"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:105
+msgid "分享给别人"
+msgstr ""
+
+#: www/wiki/html/apps.html:222
+msgid "分类"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:483
+msgid "分组"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:440
+msgid "分组名"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:404
+msgid "分组名称："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:414
+msgid "分组成员："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:393
+#: www/wiki/html/editWebsite.html:401
+msgid "分组管理"
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:21
+msgid "列数"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:409
+msgid "创建"
+msgstr ""
+
+#: www/wiki/html/website.html:133
+msgid "创建时间"
+msgstr ""
+
+#: www/wiki/html/user.html:305
+msgid "创建的组织："
+msgstr ""
+
+#: www/wiki/html/user.html:357
+msgid "创建的网站"
+msgstr ""
+
+#: www/wiki/html/notfound.html:63
+msgid "创建该页面"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:78
+#: www/wiki/html/editWebsite.html:451
+#: www/wiki/html/editWebsite.html:485
+#: www/wiki/html/editWebsite.html:493
+#: www/wiki/html/temp.html:54
+#: www/wiki/html/userProfile.html:837
+#: www/wiki/html/userProfile.html:977
+msgid "删除"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:263
+msgid "删除一行"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:264
+msgid "删除单词"
+msgstr ""
+
+#: www/wiki/html/website.html:166
+msgid "删除提醒"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:281
+msgid "删除线"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:542
+msgid "删除选中"
+msgstr ""
+
+#: www/wiki/html/services.html:225
+msgid "到期"
+msgstr ""
+
+#: www/wiki/html/services.html:206
+msgid "到期时间"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:325
+#: www/wiki/html/newWebsite.html:400
+msgid "前往设置"
+msgstr ""
+
+#: www/wiki/html/header.html:522
+#: www/wiki/html/header.html:536
+msgid "功能"
+msgstr ""
+
+#: www/wiki/html/home.html:549
+msgid "功能介绍"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:316
+#: www/wiki/html/newWebsite.html:391
+msgid "功能模板："
+msgstr ""
+
+#: www/wiki/html/footer.html:117
+msgid "加入我们"
+msgstr ""
+
+#: www/wiki/html/user.html:314
+msgid "加入的组织："
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:279
+msgid "加粗"
+msgstr ""
+
+#: www/wiki/html/header.html:418
+msgid "动态"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:120
+msgid "升级有什么好处？"
+msgstr ""
+
+#: www/wiki/html/header.html:461
+msgid "历史"
+msgstr ""
+
+#: www/wiki/html/user.html:377
+msgid "参与的网站"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:215
+msgid "参与的项目"
+msgstr ""
+
+#: www/wiki/html/footer.html:157
+msgid "反馈内容："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:516
+msgid "取 消"
+msgstr ""
+
+#: www/wiki/html/editorInsertImg.html:54
+#: www/wiki/html/editorInsertLink.html:27
+#: www/wiki/html/editorInsertTable.html:48
+#: www/wiki/html/editorInsertVideo.html:57
+#: www/wiki/html/editorNewFile.html:42
+#: www/wiki/html/editorNewPage.html:272
+#: www/wiki/html/footer.html:164
+#: www/wiki/html/footer.html:188
+#: www/wiki/html/userProfile.html:1099
+#: www/wiki/html/userProfile.html:1147
+#: www/wiki/html/website.html:178
+msgid "取消"
+msgstr ""
+
+#: www/wiki/html/join.html:135
+#: www/wiki/html/join.html:194
+msgid "可以使用英文字母、数字组合（例如：keep123）"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:397
+msgid "可用"
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:36
+msgid "右对齐"
+msgstr ""
+
+#: www/wiki/html/oauth.html:91
+msgid "同 意"
+msgstr ""
+
+#: www/wiki/html/website.html:172
+msgid "同时清空全部数据"
+msgstr ""
+
+#: www/wiki/html/statics.html:20
+msgid "名人数量"
+msgstr ""
+
+#: www/wiki/html/header.html:409
+msgid "后台管理"
+msgstr ""
+
+#: www/wiki/html/githubAuth.html:9
+msgid "否"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:413
+#: www/wiki/html/wikiEditor.html:291
+msgid "图片"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:1119
+msgid "图片验证码："
+msgstr ""
+
+#: www/wiki/html/license.html:86
+msgid "在不透露单个用户隐私资料的前提下，大富网络有权对整个用户数据库进行分析并对用户数据库进行商业上的利用。"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:245
+#: www/wiki/html/editWebsite.html:335
+msgid "域名管理"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:86
+#: www/wiki/html/userProfile.html:985
+msgid "增改数据源"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:127
+#: www/wiki/html/gitVersion.html:215
+msgid "备注"
+msgstr ""
+
+#: www/wiki/html/services.html:237
+#: www/wiki/html/services.html:252
+#: www/wiki/html/vip.html:192
+#: www/wiki/html/vip.html:207
+msgid "多平台在线编辑器"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:433
+#: www/wiki/html/bigfile.html:489
+msgid "多选"
+msgstr ""
+
+#: www/wiki/html/license.html:92
+msgid "大富网络不保证为向用户提供便利而设置的外部链接的准确性和完整性，同时，对于该等外部链接指向的不由大富网络实际控制的任何网页上的内容，大富网络不承担任何责任。"
+msgstr ""
+
+#: www/wiki/html/license.html:91
+msgid "大富网络不担保网络服务一定能满足用户的要求，也不担保网络服务不会中断，对网络服务的及时性、安全性、准确性也都不作担保。"
+msgstr ""
+
+#: www/wiki/html/license.html:73
+msgid "大富网络为提供网络服务而使用的任何软件（包括但不限于软件中所含的任何图象、照片、动画、录像、录音、音乐、文字和附加程序、随附的帮助材料）的一切权利均属于该软件的著作权人，未经该软件的著作权人许可，用户不得对该软件进行反向工程（reverse engineer）、反向编译（decompile）或反汇编（disassemble）。"
+msgstr ""
+
+#: www/wiki/html/license.html:85
+msgid "大富网络可能会与第三方合作向用户提供相关的网络服务，在此情况下，如该第三方同意承担与大富网络同等的保护用户隐私的责任，则大富网络有权将用户的注册资料等提供给该第三方。"
+msgstr ""
+
+#: www/wiki/html/license.html:98
+msgid "大富网络向收费网络服务用户附赠的各种产品或者服务。"
+msgstr ""
+
+#: www/wiki/html/license.html:96
+msgid "大富网络向用户免费提供的各项网络服务；"
+msgstr ""
+
+#: www/wiki/html/license.html:97
+msgid "大富网络向用户赠送的任何产品或者服务；"
+msgstr ""
+
+#: www/wiki/html/license.html:68
+msgid "大富网络将建立健全用户信息安全管理制度、落实技术安全防控措施。大富网络将对用户使用一人一网网络服务过程中涉及的用户隐私内容加以保护。"
+msgstr ""
+
+#: www/wiki/html/license.html:72
+msgid "大富网络提供的网络服务中包含的任何文本、图片、图形、音频和/或视频资料均受版权、商标和/或其它财产所有权法律的保护，未经相关权利人同意，上述资料均不得在任何媒体直接或间接发布、播放、出于播放或发布目的而改写或再发行，或者被用于其他任何商业目的。所有这些资料或资料的任何部分仅可作为私人和非商业用途而保存在某台计算机内。大富网络不就由上述资料产生或在传送或递交全部或部分上述资料过程中产生的延误、不准确、错误和遗漏或从中产生或由此产生的任何损害赔偿，以任何形式，向用户或任何第三方负责。"
+msgstr ""
+
+#: www/wiki/html/license.html:26
+msgid "大富网络提供的部分网络服务（例如域名服务等）为收费的网络服务，用户使用收费网络服务需要向大富网络支付一定的费用。对于收费的网络服务，大富网络会在用户使用之前给予用户明确的提示，只有用户根据提示确认其愿意支付相关费用，用户才能使用该等收费网络服务。如用户拒绝支付相关费用，则大富网络有权不向用户提供该等收费网络服务。"
+msgstr ""
+
+#: www/wiki/html/license.html:61
+msgid "大富网络有权对用户使用大富网络网络服务【该网络服务包括但不限于收费及免费网络服务（其中包括基于广告模式的免费网络服务）】的情况进行审查和监督(包括但不限于对用户存储在大富网络的内容进行审核)，如用户在使用网络服务时违反任何上述规定，大富网络或其授权的人有权要求用户改正或直接采取一切必要的措施（包括但不限于更改或删除用户张贴的内容等、暂停或终止用户使用网络服务的权利）以减轻用户不当行为造成的影响。"
+msgstr ""
+
+#: www/wiki/html/license.html:108
+msgid "大富网络有权随时修改本协议的任何条款，一旦本协议的内容发生变动，大富网络将会直接在大富网络网站上公布修改之后的协议内容，该公布行为视为大富网络已经通知用户修改内容。大富网络也可通过其他适当方式向用户提示修改内容。"
+msgstr ""
+
+#: www/wiki/html/license.html:25
+msgid "大富网络网络服务的具体内容由大富网络根据实际情况提供，例如创建网站、搜索、留言、存储、发表评论等。"
+msgstr ""
+
+#: www/wiki/html/license.html:62
+msgid "大富网络针对某些特定的大富网络网络服务的使用通过各种方式（包括但不限于网页公告、电子邮件、短信提醒等）作出的任何声明、通知、警示等内容视为本协议的一部分，用户如使用该等大富网络网络服务，视为用户同意该等声明、通知、警示的内容。"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:442
+#: www/wiki/html/bigfile.html:498
+msgid "大小"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:529
+msgid "女"
+msgstr ""
+
+#: www/wiki/html/invite.html:16
+msgid "好友email："
+msgstr ""
+
+#: www/wiki/html/home.html:521
+msgid "如何用KeepWork写网站？"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:89
+msgid "如何获得经验值？"
+msgstr ""
+
+#: www/wiki/html/license.html:119
+msgid "如双方就本协议内容或其执行发生任何争议，双方应尽量友好协商解决；协商不成时，任何一方均可向大富网络所在地的人民法院提起诉讼。"
+msgstr ""
+
+#: www/wiki/html/license.html:33
+msgid "如发生下列任何一种情形，大富网络有权随时中断或终止向用户提供本协议项下的网络服务【该网络服务包括但不限于收费及免费网络服务（其中包括基于广告模式的免费网络服务）】而无需对用户或任何第三方承担任何责任："
+msgstr ""
+
+#: www/wiki/html/license.html:103
+msgid "如因大富网络违反有关法律、法规或本协议项下的任何条款而给用户造成损失，大富网络同意承担由此造成的损害赔偿责任。"
+msgstr ""
+
+#: www/wiki/html/contact.html:24
+msgid "如有任何问题，请发送邮件到"
+msgstr ""
+
+#: www/wiki/html/license.html:124
+msgid "如本协议中的任何条款无论因何种原因完全或部分无效或不具有执行力，本协议的其余条款仍应有效并且有约束力。"
+msgstr ""
+
+#: www/wiki/html/license.html:109
+msgid "如果不同意大富网络对本协议相关条款所做的修改，用户有权停止使用网络服务。如果用户继续使用网络服务，则视为用户接受大富网络对本协议相关条款所做的修改。"
+msgstr ""
+
+#: www/wiki/html/license.html:39
+msgid "如用户注册的免费网络服务的帐号在任何连续90日内未实际使用，或者用户注册的收费网络服务的帐号在其订购的收费网络服务的服务期满之后连续180日内未实际使用，则大富网络有权删除该帐号并停止为该用户提供相关的网络服务。"
+msgstr ""
+
+#: www/wiki/html/license.html:67
+msgid "如用户违反前述5.1条之约定，依据相关法律、法规及国家政策要求，大富网络有权随时中止或终止用户对一人一网网络服务的使用且不承担违约责任。"
+msgstr ""
+
+#: www/wiki/html/services.html:239
+#: www/wiki/html/services.html:254
+#: www/wiki/html/vip.html:194
+#: www/wiki/html/vip.html:209
+msgid "子域名"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:623
+msgid "安全验证表单"
+msgstr ""
+
+#: www/wiki/html/join.html:187
+msgid "完善信息后可使用第三方账号登录页可使用本站账号密码登录。"
+msgstr ""
+
+#: www/wiki/html/join.html:186
+msgid "完善账号信息"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:512
+msgid "完善资料"
+msgstr ""
+
+#: www/wiki/html/home.html:467
+#: www/wiki/html/join.html:143
+#: www/wiki/html/join.html:202
+#: www/wiki/html/login.html:105
+msgid "密码"
+msgstr ""
+
+#: www/wiki/html/license.html:93
+msgid "对于因不可抗力或大富网络不能控制的原因造成的网络服务中断或其它缺陷，大富网络不承担任何责任，但将尽力减少因此而给用户造成的损失和影响。"
+msgstr ""
+
+#: www/wiki/html/license.html:48
+msgid "对于用户通过大富网络网络服务（包括但不限于创建的网站、评论）上传到大富网络网站上可公开获取区域的任何内容，用户同意大富网络在全世界范围内具有免费的、永久性的、不可撤销的、非独家的和完全再许可的权利和许可，以使用、复制、修改、改编、出版、翻译、据以创作衍生作品、传播、表演和展示此等内容（整体或部分），和/或将此等内容编入当前已知的或以后开发的其他任何形式的作品、媒体或技术中。"
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:25
+msgid "对齐方式"
+msgstr ""
+
+#: www/wiki/html/oauth.html:101
+msgid "将获得以下权限："
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:33
+msgid "居中"
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:30
+msgid "左对齐"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:60
+msgid "已成功重置#username#密码，"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:189
+msgid "已打开"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:54
+#: www/wiki/html/userProfile.html:953
+msgid "已配置的数据源"
+msgstr ""
+
+#: www/wiki/html/header.html:525
+#: www/wiki/html/header.html:539
+msgid "帮助"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:239
+msgid "常用设置"
+msgstr ""
+
+#: www/wiki/html/header.html:523
+#: www/wiki/html/header.html:537
+msgid "应用中心"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:328
+#: www/wiki/html/newWebsite.html:403
+msgid "开启VIP"
+msgstr ""
+
+#: www/wiki/html/footer.html:116
+msgid "开放平台"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:287
+msgid "引用内容"
+msgstr ""
+
+#: www/wiki/html/user.html:404
+#: www/wiki/html/user.html:415
+msgid "弱"
+msgstr ""
+
+#: www/wiki/html/user.html:412
+#: www/wiki/html/user.html:423
+msgid "强"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:389
+msgid "当前使用："
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:262
+msgid "当前行尾"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:261
+msgid "当前行首"
+msgstr ""
+
+#: www/wiki/html/notfound.html:57
+msgid "很抱歉！您访问的页面不存在..."
+msgstr ""
+
+#: www/wiki/html/pay.html:449
+msgid "微信支付"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:658
+msgid "微信绑定："
+msgstr ""
+
+#: www/wiki/html/userProfile.html:667
+msgid "微博绑定："
+msgstr ""
+
+#: www/wiki/html/home.html:475
+#: www/wiki/html/login.html:112
+msgid "忘记密码？"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:521
+msgid "性别："
+msgstr ""
+
+#: www/wiki/html/bigfile.html:398
+msgid "总共"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:324
+#: www/wiki/html/newWebsite.html:399
+msgid "恭喜你，网站创建成功！"
+msgstr ""
+
+#: www/wiki/html/join.html:172
+msgid "恭喜您注册成功！"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:60
+msgid "恭喜您！"
+msgstr ""
+
+#: www/wiki/html/pay.html:540
+msgid "恭喜，您已支付成功！"
+msgstr ""
+
+#: www/wiki/html/browers.html:32
+msgid "您的IE版本过低，请更新到"
+msgstr ""
+
+#: www/wiki/html/services.html:225
+msgid "您的VIP特权将在"
+msgstr ""
+
+#: www/wiki/html/services.html:226
+msgid "您还不是VIP用户。"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:327
+#: www/wiki/html/newWebsite.html:402
+msgid "您还可以在"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:356
+#: www/wiki/html/editWebsite.html:378
+msgid "成为VIP"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:441
+msgid "成员"
+msgstr ""
+
+#: www/wiki/html/myVIP.html:13
+#: www/wiki/html/services.html:222
+msgid "我的VIP"
+msgstr ""
+
+#: www/wiki/html/header.html:401
+msgid "我的主页"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:813
+msgid "我的历史"
+msgstr ""
+
+#: www/wiki/html/website.html:123
+msgid "我的站点"
+msgstr ""
+
+#: www/wiki/html/header.html:404
+msgid "我的网盘"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:495
+msgid "我的资料"
+msgstr ""
+
+#: www/wiki/html/pay.html:545
+msgid "或"
+msgstr ""
+
+#: www/wiki/html/browers.html:34
+msgid "或者下载其它浏览器"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:424
+msgid "或者在我的大文件中选择："
+msgstr ""
+
+#: www/wiki/html/userProfile.html:638
+msgid "手机绑定："
+msgstr ""
+
+#: www/wiki/html/userProfile.html:884
+msgid "手机认证"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:893
+msgid "手机认证表单"
+msgstr ""
+
+#: www/wiki/html/pay.html:514
+msgid "打开手机支付宝"
+msgstr ""
+
+#: www/wiki/html/editorInsertVideo.html:49
+msgid "打开文件浏览器"
+msgstr ""
+
+#: www/wiki/html/pay.html:505
+msgid "扫一扫付款（元）"
+msgstr ""
+
+#: www/wiki/html/pay.html:516
+msgid "扫一扫继续付款"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:29
+msgid "找回Keepwork账号"
+msgstr ""
+
+#: www/wiki/html/footer.html:175
+msgid "投诉"
+msgstr ""
+
+#: www/wiki/html/footer.html:181
+msgid "投诉原因："
+msgstr ""
+
+#: www/wiki/html/footer.html:121
+msgid "投诉本页"
+msgstr ""
+
+#: www/wiki/html/search.html:208
+#: www/wiki/html/search.html:225
+msgid "抱歉！ ~没有搜索到"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:140
+msgid "拆分"
+msgstr ""
+
+#: www/wiki/html/oauth.html:92
+msgid "拒 绝"
+msgstr ""
+
+#: www/wiki/html/license.html:81
+msgid "按照相关政府主管部门的要求；"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:460
+msgid "授权列表"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:392
+msgid "授权管理"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:36
+msgid "提 交"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:121
+#: www/wiki/html/footer.html:163
+#: www/wiki/html/footer.html:187
+#: www/wiki/html/userProfile.html:1020
+#: www/wiki/html/worksApply.html:10
+msgid "提交"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:123
+#: www/wiki/html/gitVersion.html:211
+msgid "提交记录"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:419
+msgid "插 入"
+msgstr ""
+
+#: www/wiki/html/editorInsertImg.html:30
+msgid "插入图片"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:380
+msgid "插入文件"
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:11
+msgid "插入表格"
+msgstr ""
+
+#: www/wiki/html/editorInsertVideo.html:30
+msgid "插入视频"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:477
+msgid "插入选中"
+msgstr ""
+
+#: www/wiki/html/editorInsertLink.html:6
+msgid "插入链接"
+msgstr ""
+
+#: www/wiki/html/apps.html:218
+msgid "搜索应用中心"
+msgstr ""
+
+#: www/wiki/html/wikiBlock.html:221
+msgid "搜索模块"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:265
+msgid "撤销"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:450
+#: www/wiki/html/bigfile.html:505
+#: www/wiki/html/dataSource.html:64
+#: www/wiki/html/editWebsite.html:442
+#: www/wiki/html/gitVersion.html:129
+#: www/wiki/html/gitVersion.html:217
+#: www/wiki/html/services.html:207
+#: www/wiki/html/temp.html:36
+#: www/wiki/html/userProfile.html:963
+#: www/wiki/html/website.html:134
+#: www/wiki/html/wikiEditor.html:255
+msgid "操作"
+msgstr ""
+
+#: www/wiki/html/pay.html:494
+msgid "支付信息："
+msgstr ""
+
+#: www/wiki/html/pay.html:452
+msgid "支付宝充值"
+msgstr ""
+
+#: www/wiki/html/pay.html:553
+msgid "支付未成功！"
+msgstr ""
+
+#: www/wiki/html/pay.html:530
+msgid "支付金额："
+msgstr ""
+
+#: www/wiki/html/dataSource.html:58
+#: www/wiki/html/userProfile.html:957
+msgid "数据源名"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:97
+#: www/wiki/html/userProfile.html:996
+msgid "数据源名:"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:89
+#: www/wiki/html/userProfile.html:988
+msgid "数据源类型："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:242
+#: www/wiki/html/editWebsite.html:317
+msgid "数据源设置"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:42
+#: www/wiki/html/userProfile.html:941
+msgid "数据源配置"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:320
+msgid "数据源："
+msgstr ""
+
+#: www/wiki/html/bigfile.html:434
+#: www/wiki/html/bigfile.html:490
+#: www/wiki/html/editorNewFile.html:32
+#: www/wiki/html/temp.html:32
+msgid "文件名"
+msgstr ""
+
+#: www/wiki/html/temp.html:34
+msgid "文件大小"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:438
+#: www/wiki/html/bigfile.html:494
+#: www/wiki/html/temp.html:33
+msgid "文件类型"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:155
+#: www/wiki/html/gitVersion.html:67
+msgid "文件路径："
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:259
+msgid "文档开头"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:260
+msgid "文档末尾"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:280
+msgid "斜体"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:45
+#: www/wiki/html/userProfile.html:600
+msgid "新密码："
+msgstr ""
+
+#: www/wiki/html/editorNewFile.html:24
+msgid "新建文件夹"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:263
+#: www/wiki/html/newWebsite.html:341
+#: www/wiki/html/user.html:328
+#: www/wiki/html/website.html:127
+#: www/wiki/html/wikiEditor.html:131
+msgid "新建网站"
+msgstr ""
+
+#: www/wiki/html/editorNewPage.html:225
+#: www/wiki/html/wikiEditor.html:272
+#: www/wiki/html/wikiEditor.html:33
+msgid "新建页"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:285
+msgid "无序列表"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:128
+#: www/wiki/html/gitVersion.html:216
+msgid "日期"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:594
+msgid "旧密码："
+msgstr ""
+
+#: www/wiki/html/githubAuth.html:10
+msgid "是"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:515
+msgid "昵称："
+msgstr ""
+
+#: www/wiki/html/user.html:463
+msgid "暂无关注的网站"
+msgstr ""
+
+#: www/wiki/html/user.html:378
+msgid "暂无参与的网站"
+msgstr ""
+
+#: www/wiki/html/user.html:430
+msgid "暂无活动"
+msgstr ""
+
+#: www/wiki/html/services.html:176
+msgid "暂无消费记录..."
+msgstr ""
+
+#: www/wiki/html/bigfile.html:457
+#: www/wiki/html/bigfile.html:512
+#: www/wiki/html/userProfile.html:711
+#: www/wiki/html/userProfile.html:744
+#: www/wiki/html/userProfile.html:777
+#: www/wiki/html/userProfile.html:817
+#: www/wiki/html/website.html:138
+#: www/wiki/html/wikiBlock.html:308
+msgid "暂无相关内容..."
+msgstr ""
+
+#: www/wiki/html/user.html:483
+msgid "暂无粉丝"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:875
+msgid "暂无粉丝..."
+msgstr ""
+
+#: www/wiki/html/services.html:199
+msgid "暂无订单记录..."
+msgstr ""
+
+#: www/wiki/html/user.html:443
+msgid "暂未关注他人"
+msgstr ""
+
+#: www/wiki/html/user.html:306
+msgid "暂未创建组织"
+msgstr ""
+
+#: www/wiki/html/user.html:358
+msgid "暂未创建网站"
+msgstr ""
+
+#: www/wiki/html/user.html:315
+msgid "暂未加入组织"
+msgstr ""
+
+#: www/wiki/html/usershow.html:6
+msgid "更多"
+msgstr ""
+
+#: www/wiki/html/footer.html:119
+msgid "更新信息"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:446
+#: www/wiki/html/bigfile.html:501
+#: www/wiki/html/temp.html:35
+msgid "更新时间"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:270
+msgid "替换"
+msgstr ""
+
+#: www/wiki/html/browers.html:32
+msgid "最新版本"
+msgstr ""
+
+#: www/wiki/html/vip.html:224
+msgid "月"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:286
+msgid "有序列表"
+msgstr ""
+
+#: www/wiki/html/services.html:204
+msgid "服务"
+msgstr ""
+
+#: www/wiki/html/userCenter.html:164
+msgid "服务中心"
+msgstr ""
+
+#: www/wiki/html/license.html:125
+msgid "本协议中的标题仅为方便而设，在解释本协议时应被忽略。"
+msgstr ""
+
+#: www/wiki/html/license.html:123
+msgid "本协议构成双方对本协议之约定事项及其他有关事宜的完整协议，除本协议规定的之外，未赋予本协议各方其他权利。"
+msgstr ""
+
+#: www/wiki/html/license.html:118
+msgid "本协议的订立、执行和解释及争议的解决均应适用中国法律并受中国法院管辖。"
+msgstr ""
+
+#: www/wiki/html/license.html:113
+msgid "本协议项下大富网络对于用户所有的通知均可通过网页公告、电子邮件、手机短信或常规的信件传送等方式进行；该等通知于发送之日视为已送达收件人。"
+msgstr ""
+
+#: www/wiki/html/statics.html:29
+msgid "本周更新"
+msgstr ""
+
+#: www/wiki/html/editorInsertImg.html:35
+#: www/wiki/html/editorInsertVideo.html:35
+msgid "本地上传"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:293
+msgid "本站标签："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:484
+msgid "权限"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:248
+msgid "权限管理"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:267
+msgid "查找"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:269
+msgid "查找上一个"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:268
+msgid "查找下一个"
+msgstr ""
+
+#: www/wiki/html/pay.html:544
+msgid "查看支付记录"
+msgstr ""
+
+#: www/wiki/html/user.html:401
+msgid "查看数据统计方法"
+msgstr ""
+
+#: www/wiki/html/user.html:437
+msgid "查看更多活动"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:116
+#: www/wiki/html/gitVersion.html:205
+msgid "查询"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:284
+msgid "标题"
+msgstr ""
+
+#: www/wiki/html/license.html:80
+msgid "根据有关的法律法规要求；"
+msgstr ""
+
+#: www/wiki/html/user.html:344
+msgid "概况"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:114
+#: www/wiki/html/wikiEditor.html:294
+msgid "模块"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:548
+msgid "正在更新"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:1116
+msgid "每个手机号码每天最多发送5条短信，超出将被锁定，第二天自动解除，请谨慎操作。"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:36
+msgid "每个等级的经验值=100+3^lev"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:93
+msgid "每日登录"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:289
+msgid "水平分割线"
+msgstr ""
+
+#: www/wiki/html/home.html:480
+#: www/wiki/html/login.html:117
+msgid "没有账号？点击"
+msgstr ""
+
+#: www/wiki/html/header.html:558
+#: www/wiki/html/home.html:480
+#: www/wiki/html/join.html:152
+#: www/wiki/html/login.html:117
+msgid "注册"
+msgstr ""
+
+#: www/wiki/html/user.html:295
+msgid "注册于"
+msgstr ""
+
+#: www/wiki/html/oauth.html:95
+msgid "注册新账号"
+msgstr ""
+
+#: www/wiki/html/user.html:429
+msgid "活动"
+msgstr ""
+
+#: www/wiki/html/user.html:397
+msgid "活跃度"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:127
+msgid "浏览"
+msgstr ""
+
+#: www/wiki/html/user.html:367
+#: www/wiki/html/user.html:387
+#: www/wiki/html/user.html:452
+#: www/wiki/html/user.html:472
+#: www/wiki/html/userProfile.html:758
+#: www/wiki/html/userProfile.html:791
+#: www/wiki/html/userProfile.html:829
+msgid "浏览量"
+msgstr ""
+
+#: www/wiki/html/services.html:170
+msgid "消费记录"
+msgstr ""
+
+#: www/wiki/html/license.html:19
+msgid "深圳市大富网络技术有限公司（以下简称“大富网络”）同意按照本协议的规定及其不时发布的操作规则提供基于互联网以及移动网的相关服务（以下称“网络服务”），为获得网络服务，服务使用人（以下称“用户”）应当同意本协议的全部条款并按照页面上的提示完成全部的注册程序。用户在进行注册程序过程中点击“同意”按钮即表示用户完全接受本协议项下的全部条款。"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:299
+#: www/wiki/html/editWebsite.html:355
+#: www/wiki/html/editWebsite.html:419
+#: www/wiki/html/editWebsite.html:477
+#: www/wiki/html/wikiBlock.html:297
+msgid "添加"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:232
+msgid "清除"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:267
+msgid "点击修改"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:118
+msgid "热键"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:249
+msgid "热键表"
+msgstr ""
+
+#: www/wiki/html/pay.html:558
+msgid "热门服务"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:117
+msgid "版本"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:63
+#: www/wiki/html/services.html:205
+#: www/wiki/html/userProfile.html:962
+msgid "状态"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:344
+msgid "独立域名："
+msgstr ""
+
+#: www/wiki/html/search.html:186
+msgid "用户"
+msgstr ""
+
+#: www/wiki/html/license.html:46
+msgid "用户不应将其帐号、密码转让或出借予他人使用。如用户发现其帐号遭他人非法使用，应立即通知大富网络。因黑客行为或用户的保管疏忽导致帐号、密码遭他人非法使用，大富网络不承担任何责任。"
+msgstr ""
+
+#: www/wiki/html/license.html:104
+msgid "用户同意保障和维护大富网络及其他用户的利益，如因用户违反有关法律、法规或本协议项下的任何条款而给大富网络或任何其他第三人造成损失，用户同意承担由此造成的损害赔偿责任。"
+msgstr ""
+
+#: www/wiki/html/license.html:47
+msgid "用户同意大富网络有权在提供网络服务过程中以各种方式投放各种商业性广告或其他任何类型的商业信息（包括但不限于在大富网络网站的任何页面上投放广告），并且，用户同意接受大富网络通过电子邮件或其他方式向用户发送商品促销或其他相关商业信息。"
+msgstr ""
+
+#: www/wiki/html/license.html:94
+msgid "用户同意，对于大富网络向用户提供的下列产品或者服务的质量缺陷本身及其引发的任何损失，大富网络无需承担任何责任："
+msgstr ""
+
+#: www/wiki/html/license.html:50
+msgid "用户在使用大富网络网络服务过程中，必须遵循以下原则："
+msgstr ""
+
+#: www/wiki/html/license.html:37
+msgid "用户在使用收费网络服务时未按规定向大富网络支付相应的服务费。"
+msgstr ""
+
+#: www/wiki/html/license.html:45
+msgid "用户在申请使用大富网络网络服务时，必须向大富网络提供准确的个人资料，如个人资料有任何变动，必须及时更新。"
+msgstr ""
+
+#: www/wiki/html/license.html:114
+msgid "用户对于大富网络的通知应当通过大富网络对外正式公布的通信地址、传真号码、电子邮件地址等联系信息进行送达。"
+msgstr ""
+
+#: www/wiki/html/license.html:35
+msgid "用户提供的个人资料不真实；"
+msgstr ""
+
+#: www/wiki/html/license.html:90
+msgid "用户明确同意其使用大富网络网络服务所存在的风险将完全由其自己承担；因其使用大富网络网络服务而产生的一切后果也由其自己承担，大富网络对用户不承担任何责任。"
+msgstr ""
+
+#: www/wiki/html/license.html:66
+msgid "用户注册一人一网账号，制作、发布、传播信息内容的，应当使用真实身份信息，不得以虚假、冒用的居民身份信息、企业注册信息、组织机构代码信息进行注册。"
+msgstr ""
+
+#: www/wiki/html/license.html:21
+msgid "用户注册成功后，在使用大富网络/一人一网服务的过程中，大富网络公司有权基于用户的操作行为进行非商业性的调查研究。"
+msgstr ""
+
+#: www/wiki/html/license.html:20
+msgid "用户注册成功后，大富网络将给予每个用户一个用户帐号及相应的密码，该用户帐号和密码由用户负责保管；用户应当对以其用户帐号进行的所有活动和事件负法律责任。"
+msgstr ""
+
+#: www/wiki/html/license.html:40
+msgid "用户注册的免费一人一网帐号在任何连续90日内未实际使用，或者用户注册的收费网络服务的帐号在其订购的收费网络服务的服务期满之后连续180日内未实际使用，则大富网络有权删除该帐号并停止为该用户提供相关的网络服务。"
+msgstr ""
+
+#: www/wiki/html/license.html:41
+msgid "用户注册的免费一人一网帐号昵称如存在违反法律法规或国家政策要求，或侵犯任何第三方合法权益的情况，大富网络有权收回该账号昵称。"
+msgstr ""
+
+#: www/wiki/html/license.html:27
+msgid "用户理解，大富网络仅提供相关的网络服务，除此之外与相关网络服务有关的设备（如个人电脑、手机、及其他与接入互联网或移动网有关的装置）及所需的费用（如为接入互联网而支付的电话费及上网费、为使用移动网而支付的手机费）均应由用户自行负担。"
+msgstr ""
+
+#: www/wiki/html/license.html:32
+msgid "用户理解，大富网络需要定期或不定期地对提供网络服务的平台（如互联网网站、移动网络等）或相关的设备进行检修或者维护，如因此类情况而造成收费网络服务在合理时间内的中断，大富网络无需为此承担任何责任，但大富网络应尽可能事先进行通告。"
+msgstr ""
+
+#: www/wiki/html/license.html:36
+msgid "用户违反本协议中规定的使用规则；"
+msgstr ""
+
+#: www/wiki/html/join.html:149
+#: www/wiki/html/join.html:211
+msgid "申请即视为同意"
+msgstr ""
+
+#: www/wiki/html/apps.html:229
+msgid "申请提交应用"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:525
+msgid "男"
+msgstr ""
+
+#: www/wiki/html/header.html:557
+#: www/wiki/html/home.html:477
+#: www/wiki/html/login.html:114
+msgid "登录"
+msgstr ""
+
+#: www/wiki/html/home.html:462
+#: www/wiki/html/login.html:100
+msgid "登录账号"
+msgstr ""
+
+#: www/wiki/html/join.html:134
+#: www/wiki/html/join.html:193
+msgid "登录账号注册后不可更改"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:547
+msgid "的更新文件"
+msgstr ""
+
+#: www/wiki/html/knowledge.html:13
+msgid "目录"
+msgstr ""
+
+#: www/wiki/html/home.html:484
+#: www/wiki/html/join.html:154
+#: www/wiki/html/login.html:121
+msgid "直接使用以下账号登录"
+msgstr ""
+
+#: www/wiki/html/search.html:227
+msgid "相关的用户"
+msgstr ""
+
+#: www/wiki/html/search.html:243
+msgid "相关的站点"
+msgstr ""
+
+#: www/wiki/html/search.html:210
+msgid "相关的页面"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:119
+msgid "知识库"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:1132
+#: www/wiki/html/userProfile.html:903
+msgid "短信验证码："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:268
+#: www/wiki/html/editWebsite.html:515
+#: www/wiki/html/join.html:214
+#: www/wiki/html/userProfile.html:504
+msgid "确 定"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:54
+msgid "确 认"
+msgstr ""
+
+#: www/wiki/html/editorInsertImg.html:53
+#: www/wiki/html/editorInsertLink.html:26
+#: www/wiki/html/editorInsertTable.html:47
+#: www/wiki/html/editorInsertVideo.html:56
+#: www/wiki/html/editorNewFile.html:41
+#: www/wiki/html/editorNewPage.html:271
+#: www/wiki/html/userProfile.html:1098
+#: www/wiki/html/userProfile.html:1146
+#: www/wiki/html/website.html:177
+msgid "确定"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:925
+msgid "确认"
+msgstr ""
+
+#: www/wiki/html/home.html:544
+msgid "私有网站"
+msgstr ""
+
+#: www/wiki/html/services.html:243
+#: www/wiki/html/services.html:258
+#: www/wiki/html/vip.html:198
+#: www/wiki/html/vip.html:213
+msgid "私有网站（额外权限管理）"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:384
+msgid "私有项目"
+msgstr ""
+
+#: www/wiki/html/vip.html:227
+msgid "立即充值"
+msgstr ""
+
+#: www/wiki/html/search.html:189
+msgid "站点"
+msgstr ""
+
+#: www/wiki/html/website.html:131
+msgid "站点名称"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:275
+msgid "站点名称："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:260
+msgid "站点图标："
+msgstr ""
+
+#: www/wiki/html/website.html:132
+msgid "站点地址"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:150
+#: www/wiki/html/gitVersion.html:62
+msgid "站点版本管理"
+msgstr ""
+
+#: www/wiki/html/home.html:508
+msgid "第一次使用KeepWork？"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:40
+msgid "等级"
+msgstr ""
+
+#: www/wiki/html/header.html:390
+msgid "等级0"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:35
+msgid "等级经验值"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:59
+#: www/wiki/html/userProfile.html:958
+msgid "类型"
+msgstr ""
+
+#: www/wiki/html/fans.html:50
+#: www/wiki/html/user.html:350
+msgid "粉丝"
+msgstr ""
+
+#: www/wiki/html/footer.html:140
+msgid "粤ICP备14002196号-2"
+msgstr ""
+
+#: www/wiki/html/join.html:136
+#: www/wiki/html/join.html:195
+msgid "系统默认个人网址地址："
+msgstr ""
+
+#: www/wiki/html/header.html:424
+#: www/wiki/html/userProfile.html:696
+msgid "组织"
+msgstr ""
+
+#: www/wiki/html/services.html:244
+#: www/wiki/html/services.html:259
+#: www/wiki/html/vip.html:199
+#: www/wiki/html/vip.html:214
+msgid "组织网站模板"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:101
+#: www/wiki/html/gitVersion.html:190
+msgid "终止日期："
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:41
+msgid "经验"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:102
+#: www/wiki/html/VIPLevel.html:106
+#: www/wiki/html/VIPLevel.html:110
+#: www/wiki/html/VIPLevel.html:114
+#: www/wiki/html/VIPLevel.html:94
+#: www/wiki/html/VIPLevel.html:98
+msgid "经验值+"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:633
+#: www/wiki/html/userProfile.html:644
+msgid "绑定"
+msgstr ""
+
+#: www/wiki/html/services.html:215
+msgid "续费"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:450
+#: www/wiki/html/wikiEditor.html:277
+msgid "编辑"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:374
+msgid "网盘功能"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:383
+msgid "网盘管理"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:734
+msgid "网站"
+msgstr ""
+
+#: www/wiki/html/services.html:240
+#: www/wiki/html/services.html:255
+#: www/wiki/html/vip.html:195
+#: www/wiki/html/vip.html:210
+msgid "网站CDN访问加速"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:287
+msgid "网站介绍："
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:325
+#: www/wiki/html/newWebsite.html:400
+msgid "网站名："
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:281
+#: www/wiki/html/editWebsite.html:338
+msgid "网站地址："
+msgstr ""
+
+#: www/wiki/html/statics.html:11
+msgid "网站数量:"
+msgstr ""
+
+#: www/wiki/html/website.html:126
+msgid "网站数量："
+msgstr ""
+
+#: www/wiki/html/header.html:402
+#: www/wiki/html/user.html:332
+#: www/wiki/html/userCenter.html:151
+msgid "网站管理"
+msgstr ""
+
+#: www/wiki/html/footer.html:118
+msgid "网站统计"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:257
+msgid "网站设置"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:327
+#: www/wiki/html/newWebsite.html:402
+msgid "网站配置"
+msgstr ""
+
+#: www/wiki/html/editorInsertImg.html:34
+#: www/wiki/html/editorInsertVideo.html:34
+msgid "网络地址"
+msgstr ""
+
+#: www/wiki/html/contact.html:22
+msgid "联系我们"
+msgstr ""
+
+#: www/wiki/html/oauth.html:105
+msgid "获取个人用户信息"
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:17
+msgid "行数"
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:288
+msgid "表格"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:97
+msgid "被人关注"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:101
+msgid "被人浏览"
+msgstr ""
+
+#: www/wiki/html/home.html:509
+msgid "观看教学视频"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:414
+#: www/wiki/html/wikiEditor.html:292
+msgid "视频"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:634
+#: www/wiki/html/userProfile.html:645
+msgid "解绑"
+msgstr ""
+
+#: www/wiki/html/services.html:195
+msgid "订单中心"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:888
+msgid "认证状态：已经认证"
+msgstr ""
+
+#: www/wiki/html/apps.html:200
+msgid "让你的网站更加生动的创作工具与网络服务"
+msgstr ""
+
+#: www/wiki/html/home.html:473
+msgid "记住密码"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:306
+#: www/wiki/html/newWebsite.html:381
+msgid "设定后不可修改"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:293
+#: www/wiki/html/newWebsite.html:372
+msgid "设定网站的访问地址"
+msgstr ""
+
+#: www/wiki/html/services.html:241
+#: www/wiki/html/services.html:256
+#: www/wiki/html/vip.html:196
+#: www/wiki/html/vip.html:211
+msgid "设置VIP才可以访问"
+msgstr ""
+
+#: www/wiki/html/header.html:407
+#: www/wiki/html/userCenter.html:138
+msgid "设置中心"
+msgstr ""
+
+#: www/wiki/html/oauth.html:110
+msgid "请先登录"
+msgstr ""
+
+#: www/wiki/html/join.html:178
+msgid "请在个人资料管理中绑定手机、email。绑定后的手机号与email均可作为登录账号使用。打开"
+msgstr ""
+
+#: www/wiki/html/editorInsertImg.html:39
+msgid "请输入网络地址："
+msgstr ""
+
+#: www/wiki/html/editorInsertVideo.html:39
+msgid "请输入视频地址（url）："
+msgstr ""
+
+#: www/wiki/html/findPwd.html:30
+msgid "请输入账号绑定的邮箱，我们会将重置密码链接通过邮件发送给您。"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:61
+msgid "请返回首页，以新密码登录"
+msgstr ""
+
+#: www/wiki/html/oauth.html:97
+msgid "账号密码登录"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:582
+msgid "账号绑定"
+msgstr ""
+
+#: www/wiki/html/join.html:132
+#: www/wiki/html/join.html:191
+msgid "账户名"
+msgstr ""
+
+#: www/wiki/html/gitVersion.html:176
+#: www/wiki/html/gitVersion.html:87
+msgid "起始日期："
+msgstr ""
+
+#: www/wiki/html/join.html:182
+msgid "跳转个人首页"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:405
+msgid "输入已有url地址："
+msgstr ""
+
+#: www/wiki/html/userProfile.html:896
+msgid "输入手机号："
+msgstr ""
+
+#: www/wiki/html/join.html:181
+msgid "返 回"
+msgstr ""
+
+#: www/wiki/html/pay.html:546
+msgid "返回"
+msgstr ""
+
+#: www/wiki/html/notfound.html:61
+msgid "返回上一页"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:430
+msgid "返回分组"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:38
+#: www/wiki/html/findPwd.html:57
+msgid "返回登录"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:63
+msgid "返回首页"
+msgstr ""
+
+#: www/wiki/html/githubAuth.html:7
+msgid "进行github授权认证"
+msgstr ""
+
+#: www/wiki/html/myVIP.html:18
+msgid "追加续费"
+msgstr ""
+
+#: www/wiki/html/user.html:319
+msgid "退出"
+msgstr ""
+
+#: www/wiki/html/header.html:412
+msgid "退出登录"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:550
+msgid "选中本地文件"
+msgstr ""
+
+#: www/wiki/html/bigfile.html:547
+#: www/wiki/html/editorNewPage.html:257
+#: www/wiki/html/newWebsite.html:283
+#: www/wiki/html/newWebsite.html:363
+msgid "选择"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:463
+msgid "选择分组："
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:267
+#: www/wiki/html/newWebsite.html:347
+msgid "选择功能模板："
+msgstr ""
+
+#: www/wiki/html/temp.html:66
+msgid "选择文件"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:470
+msgid "选择权限："
+msgstr ""
+
+#: www/wiki/html/editorNewPage.html:231
+msgid "选择网站"
+msgstr ""
+
+#: www/wiki/html/worksApply.html:6
+msgid "选择要申请的作品:"
+msgstr ""
+
+#: www/wiki/html/editorNewPage.html:242
+msgid "选择页面模板："
+msgstr ""
+
+#: www/wiki/html/license.html:52
+msgid "遵守中国有关的法律和法规；"
+msgstr ""
+
+#: www/wiki/html/license.html:53
+msgid "遵守所有与网络服务有关的网络协议、规定和程序；"
+msgstr ""
+
+#: www/wiki/html/invite.html:21
+msgid "邀 请"
+msgstr ""
+
+#: www/wiki/html/invite.html:9
+#: www/wiki/html/userCenter.html:177
+msgid "邀请注册"
+msgstr ""
+
+#: www/wiki/html/invite.html:13
+msgid "邀请注册表单"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:627
+msgid "邮箱绑定："
+msgstr ""
+
+#: www/wiki/html/userProfile.html:1084
+msgid "邮箱验证码："
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:266
+msgid "重做"
+msgstr ""
+
+#: www/wiki/html/userProfile.html:607
+msgid "重复新密码："
+msgstr ""
+
+#: www/wiki/html/findPwd.html:49
+msgid "重复输入："
+msgstr ""
+
+#: www/wiki/html/wikiEditor.html:258
+msgid "重新选中"
+msgstr ""
+
+#: www/wiki/html/findPwd.html:41
+msgid "重置Keepwork密码"
+msgstr ""
+
+#: www/wiki/html/license.html:31
+msgid "鉴于网络服务的特殊性，用户同意大富网络有权随时变更、中断或终止部分或全部的网络服务（包括收费网络服务及免费网络服务）。如变更、中断或终止的网络服务属于免费网络服务，大富网络无需通知用户，也无需对任何用户或任何第三方承担任何责任；如变更、中断或终止的网络服务属于收费网络服务，大富网络应当在变更、中断或终止之前事先通知用户，并应向受影响的用户提供等值的替代性的收费网络服务，如用户不愿意接受替代性的收费网络服务，就该用户已经向大富网络支付的服务费，大富网络应当按照该用户实际使用相应收费网络服务的情况扣除相应服务费之后将剩余的服务费退还给该用户。"
+msgstr ""
+
+#: www/wiki/html/editorInsertLink.html:12
+#: www/wiki/html/wikiEditor.html:290
+msgid "链接"
+msgstr ""
+
+#: www/wiki/html/footer.html:120
+#: www/wiki/html/footer.html:152
+msgid "问题反馈"
+msgstr ""
+
+#: www/wiki/html/VIPLevel.html:109
+#: www/wiki/html/VIPLevel.html:113
+msgid "阅读别人"
+msgstr ""
+
+#: www/wiki/html/search.html:183
+msgid "页面"
+msgstr ""
+
+#: www/wiki/html/services.html:238
+#: www/wiki/html/services.html:253
+#: www/wiki/html/vip.html:193
+#: www/wiki/html/vip.html:208
+msgid "页面功能模块支持"
+msgstr ""
+
+#: www/wiki/html/editorNewPage.html:237
+msgid "页面名："
+msgstr ""
+
+#: www/wiki/html/header.html:403
+#: www/wiki/html/user.html:336
+msgid "页面编辑器"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:327
+#: www/wiki/html/newWebsite.html:402
+msgid "页面设置网站名称、标签"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:509
+msgid "项目类型"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:376
+msgid "项目类型："
+msgstr ""
+
+#: www/wiki/html/editorNewPage.html:256
+#: www/wiki/html/newWebsite.html:282
+#: www/wiki/html/newWebsite.html:362
+#: www/wiki/html/wikiEditor.html:143
+msgid "预览"
+msgstr ""
+
+#: www/wiki/html/pay.html:520
+msgid "首次使用请下载手机支付宝"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:334
+#: www/wiki/html/newWebsite.html:409
+msgid "马上编辑"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:335
+#: www/wiki/html/newWebsite.html:410
+msgid "马上配置"
+msgstr ""
+
+#: www/wiki/html/editorInsertTable.html:27
+msgid "默认"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:385
+msgid "默认不允许未登录用户浏览。可以为部分人设定编辑权限，使他们成为了参与编辑的管理员；可以为部分人设定浏览权限，则他们可以浏览您创建的内容，其他未授权用户均无法浏览"
+msgstr ""
+
+#: www/wiki/html/editWebsite.html:381
+msgid "默认允许大多数人访问，即使他们没有登录。可以为部分人设定编辑权限，使他们成为了参与编辑的管理员，还可以为部分人设定拒绝权限，则将他们加入黑名单（如果他们登录的话）。"
+msgstr ""
+
+#: www/wiki/html/dataSource.html:46
+#: www/wiki/html/userProfile.html:945
+msgid "默认数据源："
+msgstr ""
+
+#: www/wiki/html/join.html:178
+msgid "，进行绑定。"
+msgstr ""
+
+#: www/wiki/html/newWebsite.html:328
+#: www/wiki/html/newWebsite.html:403
+msgid "，额外支持私有权限以及权限管理等特权"
+msgstr ""
