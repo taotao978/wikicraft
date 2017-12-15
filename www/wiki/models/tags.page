@@ -1,0 +1,147 @@
+<?npl
+--[[
+Title: tags of pages
+Author: ZhengJiabiao
+Date: 
+]]
+include_once("./abstract/base.page")
+include_once("./user.page")
+include_once("./elastic_search.page")
+
+local tags = inherit(models.abstract.base, gettable("models.tags"))
+tags.db_name = "tags"
+
+
+function tags:ctor()
+    self:addfield("title", "string", false, 30)
+    self:addfield("creator", "string", false)
+    self:addfield("createDate", "string", false, 64)
+end
+
+
+--记录后端分析用数据
+function tags:api_upsert(params)
+    -- ensureAuthenticated()
+    if (not params.title) or (not params.username) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    if #params.title > 30 then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    local isOk = sensitiveWordFilter({title=params.title})
+    if (not isOk) then
+        return errors:wrap("含有非法字符")
+    end
+
+    --查询用户是否存在
+    local userDB = models.user:new()
+    userDB:db():findOne({["+username"]={params.username}}, resume)
+    local _, userinfo = yield()
+
+
+    --查询tag是否已存在
+    if not userinfo then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    local tag_exist = self:api_getByName(params).data
+    if tag_exist then
+        return errors:wrap(errors.SUCCESS)
+    end
+
+    params.creator = params.username
+    params.username = nil   --只保存creator
+    params.createDate = params.createDate or ParaGlobal.GetDateFormat("yyyy-MM-dd")
+
+    self:db():insertOne({["+title"] = {params.title}}, params, resume)
+    local err, tagInfo = yield()
+
+    return errors:wrap(err)
+end
+
+
+--通过title查询
+function tags:api_getByName(params)
+    if (not params.title) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    self:db():findOne({["+title"]={params.title}}, resume)
+    
+    return errors:wrap(yield())
+end
+
+
+--通过Id查询
+function tags:api_getById(params)
+    if (not params._id) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    self:db():findOne({_id=params._id}, resume)
+    
+    return errors:wrap(yield())
+end
+
+
+--通过Id删除
+function tags:api_deleteById(params)
+    --判定条件
+    --can't be deleted if it does not fit conditions
+
+    --删除tag
+    self:db():deleteOne({_id=params._id}, resume)
+    return errors:wrap(yield())
+end
+
+
+-----------------------------------ES-DEMO--------------------------------------------------------
+function tags:api_submitToES(params)
+    if (not params.page) or (not params.tags) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    local ES = models.elastic_search:new()
+    local host = ES.host
+    local url = host..format("%s/%s/%s", params._index, params._type, params._id)
+
+    params._index = nil
+    params._type = nil
+    params._id = nil
+
+    System.os.GetUrl({
+            url = url,
+            method = "PUT",
+            json = true,
+            form = {tag=params.tags, page=params.page}
+        }, resume
+    )
+
+    local code, data = yield()
+    return errors:wrap(data)
+end
+
+
+function tags:api_getFromES(params)
+    local ES = models.elastic_search:new()
+    local host = ES.host
+    local url = host..format("%s/%s/_search", params._index, params._type)
+
+    System.os.GetUrl({
+            url = url,
+            method = "GET",
+            -- form = {tag=params.title, page=params.page}
+        }, resume
+    )
+
+    return errors:wrap(yield())
+end
+
+
+
+-- To simplify json encoding, we can send form as json string using following shortcut
+-- System.os.GetUrl({url = "http://localhost:8099/ajax/console?action=getparams", 
+-- json = true, form = {key="value", key2 ={subtable="subvalue"} } }, 
+-- function(err, msg, data)		echo(data)  end);

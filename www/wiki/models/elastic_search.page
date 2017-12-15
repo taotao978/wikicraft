@@ -103,8 +103,8 @@ function elastic_search:api_submitSiteinfo(params)
 		user_name = params.username,
 		site_name = params.sitename,
 		extra_type = "siteinfo",
-		extra_search= content,
-		extra_data=extra_data,
+		extra_search = content,
+		extra_data = extra_data,
 	}
 
 	if params.visibility == "private" then
@@ -140,12 +140,23 @@ function elastic_search:api_submitPageinfo(params)
 		--return errors:wrap(errors.REQUEST_PARAMS_ERROR)
 	--end
 
-	local pageinfo = params.pageinfo or {}
+    local pageinfo = params.pageinfo or {}
+    local content = params.content
+    local tags = ""
+    
+    params.tags = params.tags or ""
 	params.pageinfo = nil
 	params.extra_type = "pageinfo"
-	params.extra_search = params.content
 	params.content = nil
 	params.extra_data = toJson(pageinfo)
+    
+    for tag in string.gmatch(params.tags, "[^|]+") do   --tags识别形式 tag1|tag2|tag3,在es中形如[tag1][tag2][tag3]
+		tags = tags .. "[" .. tag .. "]"
+	end
+
+    --将tag加入搜索信息中
+    content = content .. "\n" .. (tags or "")
+    params.extra_search = content
 
 	--log(pageinfo)
 	if pageinfo.visibility == "private" then
@@ -159,7 +170,7 @@ function elastic_search:api_submitPageinfo(params)
 	return errors:wrap(nil)
 end
 
--- 网络爬虫提交数据
+-- 网络爬虫提交数据 
 function elastic_search:api_spiderSubmitPageinfo(params)
 	if not params.content or not params.filepath then
 		return errors:wrap(errors.REQUEST_PARAMS_ERROR)
@@ -199,4 +210,578 @@ function elastic_search:api_spiderSubmitPageinfo(params)
 end
 
 
+-------------------------------------------------------new version----------------------------------------------------
+elastic_search.host = "http://127.0.0.1:9200"  --可从配置文件读取
 
+
+--提交数据至ES
+function elastic_search:upsertToES(params)
+    -- params.flag = "upsertToES"
+    -- log(params, true)
+    -- params.flag = nil
+
+    if (not params.type) or (params.type == "") then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    -- 查询后若存在则转为更新
+    -- 处理type为page时
+    local query_table = {}
+    if params.access_url then
+        query_table.access_url = params.access_url
+        query_table.type = params.type
+    end
+
+    local pageInfo = self:getBySingleField(query_table)
+    
+    if (#pageInfo.data.hits.hits == 1) then
+        params._id = pageInfo.data.hits.hits[1]._id
+        return self:updateById(params)
+    end
+
+    -- 处理参数，生成url
+    local index = "keepwork"  --可通过参数 params.index params.type指定
+    local type = params.type
+    local upsert_to = format("%s/%s/%s", self.host, index, type)
+    local now = ParaGlobal.GetDateFormat("yyyy-MM-dd ") .. ParaGlobal.GetTimeFormat("H:mm:ss ") .. "+0800"
+    
+
+    params.type = nil
+    params.create_time = params.create_time or now
+
+    System.os.GetUrl({
+        url = upsert_to,
+        method = "POST",
+        json = true,
+        form = params
+    }, resume)
+
+    local err, result = yield()
+    return errors:wrap(err, result.data)
+end
+
+
+-- 删除数据,只能通过id
+function elastic_search:deleteBySingleField(params)
+    -- params.flag = "delete"
+    -- log(params, true)
+    -- params.flag = nil
+
+    if (not params.type) or (params.type == "") then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    -- 查询该page是否存在，获取id
+    local query_table = {}
+
+    if params.access_url then
+        query_table.access_url = params.access_url
+        query_table.type = params.type
+    end
+
+    local pageInfo = self:getBySingleField(query_table)
+
+    if (#pageInfo.data.hits.hits == 1) then
+        params._id = pageInfo.data.hits.hits[1]._id
+    else
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    local index = "keepwork"  --可通过参数 params.index params.type指定
+    local type = params.type
+    local _id = params._id 
+    local delete_to = format("%s/%s/%s/%s", self.host, index, type, _id)
+
+    System.os.GetUrl({
+        url = delete_to,
+        method = "DELETE",
+    }, resume)
+
+    local err, result = yield()
+    return errors:wrap(err, result.data)
+end
+
+
+-- 更新数据,只能通过id
+function elastic_search:updateById(params)
+    -- params.flag = "update"
+    -- log(params, true)
+    -- params.flag = nil
+
+    if (not params._id) or (not params.type) or (params.type == "") then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    local index = "keepwork"  --可通过参数 params.index params.type指定
+    local type = params.type
+    local _id = params._id
+    local update_to = format("%s/%s/%s/%s/_update", self.host, index, type, _id)
+    local now = ParaGlobal.GetDateFormat("yyyy-MM-dd ") .. ParaGlobal.GetTimeFormat("H:mm:ss ") .. "+0800"
+
+    params.type = nil
+    params._id = nil
+    params.update_time = params.update_time or now
+
+    --设为部分更新
+    local update_table = {
+        doc = params
+    }
+
+    System.os.GetUrl({
+        url = update_to,
+        method = "POST",
+        json = true,
+        form = update_table
+    }, resume)
+
+    local err, result = yield()
+    return errors:wrap(err, result.data)
+end
+
+
+-- 精确搜索，只支持单字段搜索,不返回评分
+function elastic_search:getBySingleField(params)
+    -- params.flag = "getBySingleField"
+    -- log(params, true)
+    -- params.flag = nil
+
+    local index = "keepwork"
+    local type = ""
+    if params.type then
+        type = params.type .. "/"
+        params.type = nil
+    end
+    local search_in = format("%s/%s/%s_search", self.host, index, type)
+
+    if params.access_url then
+        params["access_url.raw"] = params.access_url
+        params.access_url = nil
+    end
+
+    -- 精确搜索时使用filter提高搜索效率
+    local query_table = {
+                    query = {
+                        constant_score = { 
+                                    filter = {
+                                        term = params
+                        }
+                    }
+                }
+            }
+
+    System.os.GetUrl({
+        url = search_in,
+        method = "GET",
+        json = true,
+        form = query_table,
+    }, resume)
+
+    local err, result = yield()
+    return errors:wrap(err, result.data)
+end
+
+
+--[[
+若无params.q或params.query则返回type下所有数据。可通过params.from以及params.size分页限制返回数据。
+可通过params.q或params.query进行简单的单一字段搜索:
+    如 params.q = "username:Tim"
+    或者params.query = {"username":"Time"}
+    注意：q和query不能同时存在
+可通过params.type可指定搜索的种类:
+    当params.type="type1,type2"的情况下，则在type1以及type2中搜索，
+    当params留空时候，则在该索引下的全部种类中搜索。
+]]
+
+-- function elastic_search:api_simpleSearch(params)
+--     -- 多种类搜索处理
+--     local index = "keepwork"
+--     local type = ""
+--     local q = ""
+--     local query_table = {}
+
+--     -- params.query = {content="独特"}
+
+--     if params.type then
+--         type = params.type .. "/"
+--         params.type = nil
+--     end
+
+--     --简单字段搜索处理
+--     if (params.q) and (not params.query) then
+--         q = "?q=" .. params.q
+--         params.q = nil
+--     end
+
+--     if (params.query) and (not params.q) then
+--         query_table = {
+--                 query = {
+--                     match = params.query
+--             }
+--         }
+--         params.query = nil
+--     end
+
+--     local search_in = format("%s/%s/%s_search%s", self.host, index, type, q)
+
+--     System.os.GetUrl({
+--         url = search_in,
+--         method = "GET", 
+--         json = true,
+--         form = query_table
+--     }, resume)
+
+--     local err, result = yield()
+--     return errors:wrap(err, result.data)
+-- end
+
+
+--[[
+多字段搜索，需传入字段数组params.fields以及关键字params.keyword。
+如 params.keyword = "运动"，params.fields = ["content", "pagename"]
+]]
+-- function elastic_search:api_multiFileldsSearch(params)
+    -- params.keyword = "独特"
+    -- params.fields = {"content"}
+
+--     if (not params.keyword) or  (not params.fields) or (#params.fields == 0) then
+--         return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+--     end
+--     local index = "keepwork"
+--     local type = ""
+--     local query_table = {}
+
+--     if params.type then
+--         type = params.type .. "/"
+--         params.type = nil
+--     end
+
+--     local search_in = format("%s/%s/%s_search", self.host, index, type)
+
+--     query_table = {
+--                     query = {
+--                      multi_match = {
+--                         query = params.keyword,   --string
+--                          fields = params.fields   --array
+--                     }
+--                 }
+--             }
+
+--     System.os.GetUrl({
+--         url = search_in,
+--         method = "GET", 
+--         json = true,
+--         form = query_table
+--     }, resume)
+
+--     local err, result = yield()
+--     return errors:wrap(err, result.data)
+-- end
+
+
+
+--------------------------------------------search--------------------------------------------------------
+-- 参数解析、处理、传递给search
+function elastic_search:params_parser(params)
+    -- local new_params = {}
+    
+    -- new_params.keyword = params.q
+    -- new_params.fields = commonlib.split(params.f, "")
+    -- new_params.highlight = params.highlight
+    -- new_params.advanced = params.advanced
+
+    -- if params.range then
+    --     local
+    -- end
+
+    -- if (params.size > 500) then
+    --     new_params.size = 500
+    -- else
+    --     new_params.size = params.size
+    -- end
+
+end
+
+
+-- 搜索入口
+function elastic_search:api_search(params)
+    --解析参数
+    params = self:params_parser(params)   --待补完
+
+    -- 普通搜索参数检验
+    if (not params.keyword) and (not params.advanced) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    -- 高级搜索参数检验
+    if params.advanced then
+        if ((not params.must) and (not params.should)) and (not (params.keyword and params.fields)) then
+            return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+        end
+        
+        -- 使用高级搜索时不建议直接传入普通的 keyword 和 fields的形式，故fields 不支持两个以上
+        if (params.fields) and (#params.fields > 1) then
+            return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+        end
+    end
+
+    local index = "keepwork"
+    local type = ""
+
+    if params.type then
+        type = params.type .. "/"
+        params.type = nil
+    end
+
+    local search_in = format("%s/%s/%s_search", self.host, index, type)
+    local query_table = {}
+
+    -- 生成查询表
+    if params.advanced then
+        query_table = self:advanced_query_table_generator(params)
+    else
+        query_table = self:query_table_generator(params)
+    end
+
+    -- 高亮处理
+    if params.highlight then
+        query_table.highlight = {fields = self:highlight_fields_generator(params)}
+    end
+
+    -- 排序处理
+    if params.sort then
+        query_table.sort = params.sort      -- array
+    end
+
+    -- return query_table
+    return self:get_search_result(query_table, search_in)
+end
+
+
+function elastic_search:highlight_fields_generator(params)
+    local highlight_fields = {}
+
+    -- 高级搜索高亮字段处理
+    if params.advanced then
+        if params.must then
+            for i, condition in ipairs(params.must) do
+                for k, v in pairs(condition) do
+                    if (k == "match" or "term") then
+                        for field, _ in pairs(v) do
+                            highlight_fields[field] = {}
+                        end
+                    end
+                end
+            end
+        end
+
+        if params.should then
+            for i, condition in ipairs(params.should) do
+                for k, v in pairs(condition) do
+                    if (k == "match" or "term") then
+                        for field, _ in pairs(v) do
+                            highlight_fields[field] = {}
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    -- 普通搜索高亮字段处理
+    if params.fields then
+        for i, field in ipairs(params.fields) do
+            highlight_fields[field] = {}
+        end
+    end
+
+    return highlight_fields
+end
+
+
+--[[ 
+处理ES查询语法
+params.keyword 输入关键词，多词情况下用空格分隔
+params.fields为匹配字段组成的数组
+params.term 为是否精确搜索，缺省为全文搜索，params.term = true时为精确搜索
+params.highlight= true时返回高亮
+]]
+function elastic_search:query_table_generator(params)
+    local query_table = {}
+    local query = {}
+
+    -- 精确搜索，限单字段
+    if params.term then
+        
+        -- 多词处理
+        if (string.find(params.keyword, " ")) then
+            local terms = {}
+            local keywords = commonlib.split(params.keyword, " ")
+            table.insert(keywords, params.keyword)
+            terms[params.fields[1]] = keywords
+            query = {terms = terms}
+
+        -- 单词处理
+        else
+            local term = {}
+            term[params.fields[1]] = params.keyword
+            query = {term = term}
+        end
+
+    else
+        -- 单字段全文搜索，支持多词
+        if (#params.fields == 1) then
+            local match = {}
+            match[params.fields[1]] = params.keyword
+            query = {match = match}
+
+        -- 多字段全文搜索，支持多词
+        elseif (#params.fields > 1) then
+                query = {
+                multi_match = {
+                    query = params.keyword,   --string
+                    fields = params.fields   --array
+                    }
+                }
+        end
+    end
+
+    query_table.query = query
+    return query_table
+end
+
+
+--[[
+高级搜索，params.advanced = true 时进入
+
+params.should,   params.must, params.must_not可输入由条件组成的数组，条件格式如下：
+    {"match":{"tags":"sports"}} 模糊匹配
+    {"term":{"username":"Tim"}} 精确匹配
+
+params.keyword 和 单字段的params.fields传入会成为默认的should条件，
+如需支持更多条件可传入should条件
+
+完整query_table如下
+
+    query_table = {
+            "query" : {
+                "bool" : {
+                    "should"   :   [condition1, condition2],
+                    "must"     :   [condition3, condition4],
+                    "must_not" :   [condition5, condition6],
+                    "filter" :{
+                        condition7,condition8
+                }
+            }
+        }
+]]
+
+function elastic_search:advanced_query_table_generator(params)
+    local query_table = {}
+    local bool = {}
+    local should = {}
+    local match = {}
+
+    -- 确保有搜索短语
+
+    if (params.fields) and (#params.fields == 1) then
+        match[params.fields[1]] = params.keyword
+    end
+
+    local default_condition = {match = match}
+
+    if params.should then
+        should = params.should
+    end
+
+    table.insert(should, default_condition)
+    bool.should = should   --  array of conditions,至少一条件要满足，如果满足会增加匹配分数
+
+    if params.must then
+        bool.must = params.must   --  array of conditions,搜索结果必须满足
+    end
+
+    if params.must_not then
+        bool.must_not = params.must_not   -- array of conditions,搜索结果必须不满足
+    end
+
+    if params.range then
+        bool.filter = {range = params.range}   --设置筛选范围
+    end
+
+    query_table.query= {bool = bool}
+
+    return query_table
+end
+
+
+-- 向ES发送请求
+function elastic_search:get_search_result(query_table, search_in)
+    if (query_table == {}) or (search_in == "") then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    System.os.GetUrl({
+        url = search_in,
+        method = "GET", 
+        json = true,
+        form = query_table
+    }, resume)
+
+    local err, result = yield()
+    return errors:wrap(err, result.data)
+end
+
+
+--------------------------------------------test code----------------------------------------------------------
+function elastic_search:api_testSearch()
+    params = {}
+    params.type = "page"
+    params.size = 50    
+    params.fields = {"tags"}
+    params.keyword = "tag200"
+    -- params.term = true
+
+    -- params.advanced = true
+    params.highlight = true
+    -- params.must_not = {{match={username = "william"}}}
+    params.range = {
+        age = {gte = 197}
+    }
+    --2017-12-14 10:50:00
+
+    params.sort = {{age = {order="desc"}}}
+
+    return self:api_search(params)  
+end
+
+
+function elastic_search:api_testUpsert(params)
+    local data
+    local content
+    for i = 101, 200 do
+        data = {
+            type = "page",
+            access_url = "localhost:8099/william/home/test" .. i,
+            url = "/william/home/test" .. i,
+            tags = {"tag".. i},
+            username = "william",
+            sitename  = "home",
+            pagename = "test" .. i,
+            content = "中文内容测试，足球、篮球、爬山，这是一个elasticsearch的中文测试" .. i,
+            age = i
+        }
+
+        content = self:upsertToES(data) 
+    end
+
+    return content
+end
+
+
+function elastic_search:api_testUpdate(params)
+    return self:update(params)
+end
+
+function elastic_search:api_testDelete(params)
+    return self:deleteBySingleField(params)
+end
