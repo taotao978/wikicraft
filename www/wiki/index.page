@@ -2,9 +2,10 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
-	<meta name="baidu-site-verification" content="TP1ZsTDElU" />
+	<meta name="baidu-site-verification" content="EK3ntTabe5" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="keepwork, 作品, 创作平台, ParaCraft, 3D, 动画, 电影, CAD, 教育, 医疗">
     <title ng-bind="title">keepwork.com</title>
     <link rel="icon" href="/wiki/assets/imgs/icon/logo.ico" type="image/x-icon" />
 
@@ -33,7 +34,9 @@
         <!--用户站点内容体-->
         <div>
             <div id="__UserSitePageContentContainer__">
-                <div id="__UserSitePageContent__"></div>
+                <div id="__UserSitePageContent__">
+				<? RenderPageContent() ?>
+				</div>
             </div>
         </div>
     </div>
@@ -45,6 +48,21 @@
 
 <!-- 全局配置 -->
 <? RenderServerWikiScript() ?>
+
+--<script>
+--(function(){
+    --var bp = document.createElement('script');
+    --var curProtocol = window.location.protocol.split(':')[0];
+    --if (curProtocol === 'https') {
+        --bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    --}
+    --else {
+        --bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    --}
+    --var s = document.getElementsByTagName("script")[0];
+    --s.parentNode.insertBefore(bp, s);
+--})();
+--</script>
 
 </body>
 </html>
