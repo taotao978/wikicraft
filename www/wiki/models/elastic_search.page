@@ -214,6 +214,57 @@ end
 elastic_search.host = "http://127.0.0.1:9200"  --可从配置文件读取
 
 
+--检验及提交page信息
+function elastic_search:api_upsertPage(params)
+    local page = {}
+
+    if ((not params.username) or (not params.sitename) or 
+        (not params.pagename) or (not params.access_url ) or
+        (not params.url) or (not params.pagetype)) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    page.type = 'page'
+    page.username = params.username
+    page.sitename = params.sitename
+    page.pagename = params.pagename
+    page.access_url = params.access_url
+    page.url = params.url
+    page.pagetype = params.pagetype
+    page.visibility = params.visibility
+
+    -- content tags 处理
+    if (page.visibility) and (page.visibility == "private") then
+        page.content = "THIS IS A PRIVATE WEBPAGE!"
+    else
+        page.content, page.tags = self:content_handler(params.content)
+    end
+
+    self:upsertToES(page)
+    return errors:wrap(nil)
+end
+
+
+--提取tags，处理content
+function elastic_search:content_handler(content)
+    local new_content = content
+    local tags = {}
+
+    local locate_tags = commonlib.split(content, "\n")[1]
+    locate_tags = commonlib.split(locate_tags, " ")
+    if (locate_tags[2] == "tags") and (#locate_tags > 4) then  -- {'<!--', 'tags', ':', tag1,...,"-->"}
+        local count = 0
+        for i = 4, (#locate_tags - 1) do
+            table.insert(tags, locate_tags[i])
+            count = count + 1
+            if (count == 5) then break end  -- 最多支持5个tags
+        end
+    end
+
+    return new_content, tags
+end
+
+
 --提交数据至ES
 function elastic_search:upsertToES(params)
     -- params.flag = "upsertToES"
@@ -247,7 +298,7 @@ function elastic_search:upsertToES(params)
     
 
     params.type = nil
-    params.create_time = params.create_time or now
+    params.create_time = now
 
     System.os.GetUrl({
         url = upsert_to,
@@ -320,7 +371,8 @@ function elastic_search:updateById(params)
 
     params.type = nil
     params._id = nil
-    params.update_time = params.update_time or now
+    params.username = nil
+    params.update_time = now
 
     --设为部分更新
     local update_table = {
@@ -381,124 +433,47 @@ function elastic_search:getBySingleField(params)
 end
 
 
---[[
-若无params.q或params.query则返回type下所有数据。可通过params.from以及params.size分页限制返回数据。
-可通过params.q或params.query进行简单的单一字段搜索:
-    如 params.q = "username:Tim"
-    或者params.query = {"username":"Time"}
-    注意：q和query不能同时存在
-可通过params.type可指定搜索的种类:
-    当params.type="type1,type2"的情况下，则在type1以及type2中搜索，
-    当params留空时候，则在该索引下的全部种类中搜索。
-]]
-
--- function elastic_search:api_simpleSearch(params)
---     -- 多种类搜索处理
---     local index = "keepwork"
---     local type = ""
---     local q = ""
---     local query_table = {}
-
---     -- params.query = {content="独特"}
-
---     if params.type then
---         type = params.type .. "/"
---         params.type = nil
---     end
-
---     --简单字段搜索处理
---     if (params.q) and (not params.query) then
---         q = "?q=" .. params.q
---         params.q = nil
---     end
-
---     if (params.query) and (not params.q) then
---         query_table = {
---                 query = {
---                     match = params.query
---             }
---         }
---         params.query = nil
---     end
-
---     local search_in = format("%s/%s/%s_search%s", self.host, index, type, q)
-
---     System.os.GetUrl({
---         url = search_in,
---         method = "GET", 
---         json = true,
---         form = query_table
---     }, resume)
-
---     local err, result = yield()
---     return errors:wrap(err, result.data)
--- end
-
-
---[[
-多字段搜索，需传入字段数组params.fields以及关键字params.keyword。
-如 params.keyword = "运动"，params.fields = ["content", "pagename"]
-]]
--- function elastic_search:api_multiFileldsSearch(params)
-    -- params.keyword = "独特"
-    -- params.fields = {"content"}
-
---     if (not params.keyword) or  (not params.fields) or (#params.fields == 0) then
---         return errors:wrap(errors.REQUEST_PARAMS_ERROR)
---     end
---     local index = "keepwork"
---     local type = ""
---     local query_table = {}
-
---     if params.type then
---         type = params.type .. "/"
---         params.type = nil
---     end
-
---     local search_in = format("%s/%s/%s_search", self.host, index, type)
-
---     query_table = {
---                     query = {
---                      multi_match = {
---                         query = params.keyword,   --string
---                          fields = params.fields   --array
---                     }
---                 }
---             }
-
---     System.os.GetUrl({
---         url = search_in,
---         method = "GET", 
---         json = true,
---         form = query_table
---     }, resume)
-
---     local err, result = yield()
---     return errors:wrap(err, result.data)
--- end
-
-
-
 --------------------------------------------search--------------------------------------------------------
 -- 参数解析、处理、传递给search
 function elastic_search:params_parser(params)
-    -- local new_params = {}
-    
-    -- new_params.keyword = params.q
-    -- new_params.fields = commonlib.split(params.f, "")
-    -- new_params.highlight = params.highlight
-    -- new_params.advanced = params.advanced
+    local new_params = {}
+    new_params.keyword = params.q
+    -- new_params.advanced = params.advanced -- 暂时不提供高级搜索，只提供全文搜索
+    new_params.range = params.range
+    new_params.sort = params.sort  -- 缺省时默认按照搜索得分降序排列，使用高级搜索时可指定排序规则
 
-    -- if params.range then
-    --     local
-    -- end
+    if (params.type) then
+        new_params.type = params.type
+    else
+        new_params.type = ""  -- 默认搜索种类为所有
+    end
 
-    -- if (params.size > 500) then
-    --     new_params.size = 500
-    -- else
-    --     new_params.size = params.size
-    -- end
+    if (params.highlight) then
+        new_params.highlight = params.highlight
+    else
+        new_params.highlight = true  -- 默认开启高亮
+    end
 
+    if (not new_params.advanced) and (new_params.type == "page") then
+        new_params.fields = {'tags', 'content', 'username', 'sitename', 'pagename'}  -- 默认搜索字段
+    else
+        new_params.fields = params.fields
+    end
+
+    if (not params.size) or (tonumber(params.size) > 500) then
+        new_params.size = '500'  -- 限制返回数量
+    else
+        new_params.size = params.size
+    end
+
+    if new_params.advanced then  -- 高级功能，暂不启用
+        new_params.must = params.must
+        new_params.must_not = params.must_not
+        new_params.should = params.should
+        new_params.range = params.range
+    end
+
+    return new_params
 end
 
 
@@ -551,6 +526,10 @@ function elastic_search:api_search(params)
     if params.sort then
         query_table.sort = params.sort      -- array
     end
+
+    -- 分页、返回数量处理
+    query_table.size = params.size
+    query_table.from = params.from
 
     -- return query_table
     return self:get_search_result(query_table, search_in)
@@ -736,9 +715,9 @@ end
 function elastic_search:api_testSearch()
     params = {}
     params.type = "page"
-    params.size = 50    
-    params.fields = {"tags"}
-    params.keyword = "tag200"
+    params.size = 250       
+    params.fields = {"full_text",'content'}
+    params.q = "厉害"
     -- params.term = true
 
     -- params.advanced = true
@@ -747,7 +726,6 @@ function elastic_search:api_testSearch()
     params.range = {
         age = {gte = 197}
     }
-    --2017-12-14 10:50:00
 
     params.sort = {{age = {order="desc"}}}
 
@@ -758,7 +736,8 @@ end
 function elastic_search:api_testUpsert(params)
     local data
     local content
-    for i = 101, 200 do
+    local f = function(i) if (i%5 ~= 0) then return "normal" else return "profile" end end
+    for i = 210, 220 do
         data = {
             type = "page",
             access_url = "localhost:8099/william/home/test" .. i,
@@ -767,8 +746,66 @@ function elastic_search:api_testUpsert(params)
             username = "william",
             sitename  = "home",
             pagename = "test" .. i,
-            content = "中文内容测试，足球、篮球、爬山，这是一个elasticsearch的中文测试" .. i,
-            age = i
+            content = [[# 
+
+## 我是个非常热爱生活的人
+
+### 
+
+**这是粗体**
+
+*这是斜体*
+
+- 表格
+
+1. 哎哟厉害哦
+
+> 闪电似的
+
+
+| 这是表格| 表格信息 |
+| -- | -- |
+| ok | 厉害 |
+
+
+---
+
+
+
+[链接](/william0911/home1/hash4567)
+
+
+
+![图片]()
+
+
+
+```@wiki/js/bigfile
+{
+	"fileId":"483","fileType":"audio/ogg",
+"extraMsg":"horse.ogg","channel":"qiniu"
+}
+```
+
+```
+
+```
+
+```@wiki/js/resumeHeader
+{
+    "backgroundImage": "",
+    "portrait": "",
+    "username": "逍遥",
+    "baseInfo": "男 本科 3年工作经验 深圳",
+    "company": "xxx",
+    "cellphone": "180*******",
+    "email": "sdsdsassd@qq.com",
+    "introduce": "我是一个边学习边分享的人。关于读书、关于影视剧、关于足球， 所学，所思，所感，所闻，分享一切有趣的、有用的。"
+}
+```]] .. i,
+            age = i,
+            pagetype = f(i),
+            pageid = i
         }
 
         content = self:upsertToES(data) 
@@ -782,6 +819,80 @@ function elastic_search:api_testUpdate(params)
     return self:update(params)
 end
 
+
 function elastic_search:api_testDelete(params)
     return self:deleteBySingleField(params)
+end
+
+
+function elastic_search:api_testParamsParser()
+    params = {}
+    params.q = "william"
+    return self:params_parser(params)
+end
+
+
+function elastic_search:api_testContentHandler()
+    local content = [[
+        <!-- tags : cs1 pc music rock game -->
+        # 
+
+        ## 我是个非常热爱生活的人
+
+        ### 
+
+        **这是粗体**
+
+        *这是斜体*
+
+        - 表格
+
+        1. 哎哟厉害哦
+
+        > 闪电似的
+
+
+        | 这是表格| 表格信息 |
+        | -- | -- |
+        | ok | 厉害 |
+
+
+        ---
+
+
+
+        [链接](/william0911/home1/hash4567)
+
+
+
+        ![图片]()
+
+
+
+        ```@wiki/js/bigfile
+        {
+            "fileId":"483","fileType":"audio/ogg",
+        "extraMsg":"horse.ogg","channel":"qiniu"
+        }
+        ```
+
+        ```
+
+        ```
+
+        ```@wiki/js/resumeHeader
+        {
+            "backgroundImage": "",
+            "portrait": "",
+            "username": "逍遥",
+            "baseInfo": "男 本科 3年工作经验 深圳",
+            "company": "xxx",
+            "cellphone": "180*******",
+            "email": "sdsdsassd@qq.com",
+            "introduce": "我是一个边学习边分享的人。关于读书、关于影视剧、关于足球， 所学，所思，所感，所闻，分享一切有趣的、有用的。"
+        }
+        ```]]
+        local params = {}
+        params.content, params.tags = self:content_handler(content)
+    return errors:wrap(nil,params)
 end
