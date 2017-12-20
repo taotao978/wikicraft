@@ -211,12 +211,16 @@ end
 
 
 -------------------------------------------------------new version----------------------------------------------------
-elastic_search.host = "http://127.0.0.1:9200"  --可从配置文件读取
+elastic_search.host = "http://127.0.0.1:9200/kwindex"  --可从配置文件读取
+local mdwiki = NPL.load('../helpers/md/mdwiki.lua')
+mdwiki.set_wiki_mod_path("../js/mod/")
 
 
 --检验及提交page信息
 function elastic_search:api_upsertPage(params)
     local page = {}
+
+    -- 用户认证 如ensureAuthenticated
 
     if ((not params.username) or (not params.sitename) or 
         (not params.pagename) or (not params.access_url ) or
@@ -241,7 +245,8 @@ function elastic_search:api_upsertPage(params)
     end
 
     self:upsertToES(page)
-    return errors:wrap(nil)
+    -- return errors:wrap(nil)
+    return errors:wrap(nil, page)
 end
 
 
@@ -250,8 +255,9 @@ function elastic_search:content_handler(content)
     local new_content = content
     local tags = {}
 
-    local locate_tags = commonlib.split(content, "\n")[1]
+    local locate_tags = commonlib.split(content, "\n")[1]  --用正则表达式匹配
     locate_tags = commonlib.split(locate_tags, " ")
+
     if (locate_tags[2] == "tags") and (#locate_tags > 4) then  -- {'<!--', 'tags', ':', tag1,...,"-->"}
         local count = 0
         for i = 4, (#locate_tags - 1) do
@@ -261,15 +267,22 @@ function elastic_search:content_handler(content)
         end
     end
 
+    -- 去除md语法
+    content = string.gsub(content, "<!--[%w%W]+?-->", '', 1)
+    content = string.gsub(content, "[#%-%|%*>]+", '')
+    content = string.gsub(content, "!-%[[%w%W]-%]%([%w%W]-%)", '')
+
+    new_content = mdwiki.render(content)
+
     return new_content, tags
 end
 
 
 --提交数据至ES
 function elastic_search:upsertToES(params)
-    -- params.flag = "upsertToES"
-    -- log(params, true)
-    -- params.flag = nil
+    params.flag = "upsertToES"
+    log(params, true)
+    params.flag = nil
 
     if (not params.type) or (params.type == "") then
         return errors:wrap(errors.REQUEST_PARAMS_ERROR)
@@ -285,20 +298,22 @@ function elastic_search:upsertToES(params)
 
     local pageInfo = self:getBySingleField(query_table)
     
-    if (#pageInfo.data.hits.hits == 1) then
+    if (pageInfo.data.hits) and (#pageInfo.data.hits.hits == 1) then
         params._id = pageInfo.data.hits.hits[1]._id
         return self:updateById(params)
     end
 
     -- 处理参数，生成url
-    local index = "keepwork"  --可通过参数 params.index params.type指定
+    -- local index = "keepwork"  可通过参数 params.index params.type指定
     local type = params.type
-    local upsert_to = format("%s/%s/%s", self.host, index, type)
+    -- local upsert_to = format("%s/%s/%s", self.host, index, type)
+    local upsert_to = format("%s/%s", self.host, type)
     local now = ParaGlobal.GetDateFormat("yyyy-MM-dd ") .. ParaGlobal.GetTimeFormat("H:mm:ss ") .. "+0800"
     
 
     params.type = nil
     params.create_time = now
+    params.update_time = now
 
     System.os.GetUrl({
         url = upsert_to,
@@ -332,16 +347,17 @@ function elastic_search:deleteBySingleField(params)
 
     local pageInfo = self:getBySingleField(query_table)
 
-    if (#pageInfo.data.hits.hits == 1) then
+    if (pageInfo.data.hits) and (#pageInfo.data.hits.hits == 1) then
         params._id = pageInfo.data.hits.hits[1]._id
     else
         return errors:wrap(errors.REQUEST_PARAMS_ERROR)
     end
 
-    local index = "keepwork"  --可通过参数 params.index params.type指定
+    -- local index = "keepwork"  --可通过参数 params.index params.type指定
     local type = params.type
     local _id = params._id 
-    local delete_to = format("%s/%s/%s/%s", self.host, index, type, _id)
+    -- local delete_to = format("%s/%s/%s/%s", self.host, index, type, _id)
+    local delete_to = format("%s/%s/%s", self.host, type, _id)
 
     System.os.GetUrl({
         url = delete_to,
@@ -355,24 +371,26 @@ end
 
 -- 更新数据,只能通过id
 function elastic_search:updateById(params)
-    -- params.flag = "update"
-    -- log(params, true)
-    -- params.flag = nil
+    params.flag = "update"
+    log(params, true)
+    params.flag = nil
 
     if (not params._id) or (not params.type) or (params.type == "") then
         return errors:wrap(errors.REQUEST_PARAMS_ERROR)
     end
 
-    local index = "keepwork"  --可通过参数 params.index params.type指定
+    -- local index = "keepwork"  --可通过参数 params.index params.type指定
     local type = params.type
     local _id = params._id
-    local update_to = format("%s/%s/%s/%s/_update", self.host, index, type, _id)
+    -- local update_to = format("%s/%s/%s/%s/_update", self.host, index, type, _id)
+    local update_to = format("%s/%s/%s/_update", self.host, type, _id)
     local now = ParaGlobal.GetDateFormat("yyyy-MM-dd ") .. ParaGlobal.GetTimeFormat("H:mm:ss ") .. "+0800"
 
     params.type = nil
     params._id = nil
     params.username = nil
     params.update_time = now
+    params.content, params.tags = self:content_handler(params.content)
 
     --设为部分更新
     local update_table = {
@@ -397,18 +415,23 @@ function elastic_search:getBySingleField(params)
     -- log(params, true)
     -- params.flag = nil
 
-    local index = "keepwork"
+    -- local index = "keepwork"
     local type = ""
     if params.type then
         type = params.type .. "/"
         params.type = nil
     end
-    local search_in = format("%s/%s/%s_search", self.host, index, type)
+    -- local search_in = format("%s/%s/%s_search", self.host, index, type)
+    local search_in = format("%s/%s_search", self.host, type)
 
     if params.access_url then
-        params["access_url.raw"] = params.access_url
+        params["access_url.keyword"] = params.access_url
         params.access_url = nil
     end
+
+    params.flag = "getBySingleField"
+    log(params, true)
+    params.flag = nil
 
     -- 精确搜索时使用filter提高搜索效率
     local query_table = {
@@ -441,6 +464,7 @@ function elastic_search:params_parser(params)
     -- new_params.advanced = params.advanced -- 暂时不提供高级搜索，只提供全文搜索
     new_params.range = params.range
     new_params.sort = params.sort  -- 缺省时默认按照搜索得分降序排列，使用高级搜索时可指定排序规则
+    new_params.from = params.from
 
     if (params.type) then
         new_params.type = params.type
@@ -461,10 +485,12 @@ function elastic_search:params_parser(params)
     end
 
     if (not params.size) or (tonumber(params.size) > 500) then
-        new_params.size = '500'  -- 限制返回数量
+        new_params.size = 500  -- 限制返回数量
     else
         new_params.size = params.size
     end
+
+
 
     if new_params.advanced then  -- 高级功能，暂不启用
         new_params.must = params.must
@@ -480,7 +506,7 @@ end
 -- 搜索入口
 function elastic_search:api_search(params)
     --解析参数
-    params = self:params_parser(params)   --待补完
+    params = self:params_parser(params)
 
     -- 普通搜索参数检验
     if (not params.keyword) and (not params.advanced) then
@@ -499,7 +525,7 @@ function elastic_search:api_search(params)
         end
     end
 
-    local index = "keepwork"
+    -- local index = "keepwork"
     local type = ""
 
     if params.type then
@@ -507,7 +533,8 @@ function elastic_search:api_search(params)
         params.type = nil
     end
 
-    local search_in = format("%s/%s/%s_search", self.host, index, type)
+    -- local search_in = format("%s/%s/%s_search", self.host, index, type)
+    local search_in = format("%s/%s_search", self.host, type)
     local query_table = {}
 
     -- 生成查询表
@@ -711,21 +738,24 @@ function elastic_search:get_search_result(query_table, search_in)
 end
 
 
+
+
 --------------------------------------------test code----------------------------------------------------------
 function elastic_search:api_testSearch()
     params = {}
     params.type = "page"
-    params.size = 250       
-    params.fields = {"full_text",'content'}
+    params.from = 0
+    params.size = 100
+    -- params.fields = {"full_text",'content'}
     params.q = "厉害"
     -- params.term = true
 
     -- params.advanced = true
     params.highlight = true
     -- params.must_not = {{match={username = "william"}}}
-    params.range = {
-        age = {gte = 197}
-    }
+    -- params.range = {
+    --     age = {gte = 197}
+    -- }
 
     params.sort = {{age = {order="desc"}}}
 
@@ -734,81 +764,59 @@ end
 
 
 function elastic_search:api_testUpsert(params)
-    local data
+    local data      
     local content
     local f = function(i) if (i%5 ~= 0) then return "normal" else return "profile" end end
-    for i = 210, 220 do
+    for i = 1, 1 do
         data = {
             type = "page",
             access_url = "localhost:8099/william/home/test" .. i,
             url = "/william/home/test" .. i,
-            tags = {"tag".. i},
             username = "william",
             sitename  = "home",
-            pagename = "test" .. i,
-            content = [[# 
-
-## 我是个非常热爱生活的人
-
-### 
-
-**这是粗体**
-
-*这是斜体*
-
-- 表格
-
-1. 哎哟厉害哦
-
-> 闪电似的
-
-
-| 这是表格| 表格信息 |
-| -- | -- |
-| ok | 厉害 |
-
-
----
-
-
-
-[链接](/william0911/home1/hash4567)
-
-
-
-![图片]()
-
-
-
-```@wiki/js/bigfile
-{
-	"fileId":"483","fileType":"audio/ogg",
-"extraMsg":"horse.ogg","channel":"qiniu"
-}
-```
-
-```
-
-```
-
-```@wiki/js/resumeHeader
-{
-    "backgroundImage": "",
-    "portrait": "",
-    "username": "逍遥",
-    "baseInfo": "男 本科 3年工作经验 深圳",
-    "company": "xxx",
-    "cellphone": "180*******",
-    "email": "sdsdsassd@qq.com",
-    "introduce": "我是一个边学习边分享的人。关于读书、关于影视剧、关于足球， 所学，所思，所感，所闻，分享一切有趣的、有用的。"
-}
-```]] .. i,
+            pagename = "test212" .. i,
+            content = [[
+                <!-- tags : tag1 tag2 tag3 -->
+                # 
+                ## 我是个非常热爱生活的人
+                ### 
+                **这是粗体**
+                *这是斜体*
+                - 表格
+                1. 哎哟厉害哦
+                > 闪电似的
+                | 这是表格| 表格信息 |
+                | -- | -- |
+                | ok | 厉害 |
+                ---
+                [链接](/william0911/home1/hash4567)
+                ![图片](
+                ```@wiki/js/bigfile
+                {
+                    "fileId":"483","fileType":"audio/ogg",
+                "extraMsg":"horse.ogg","channel":"qiniu"
+                }
+                ```
+                ```
+                ```
+                ```@wiki/js/resumeHeader
+                {
+                    "backgroundImage": "",
+                    "portrait": "",
+                    "username": "逍遥",
+                    "baseInfo": "男 本科 3年工作经验 深圳",
+                    "company": "xxx",
+                    "cellphone": "180*******",
+                    "email": "sdsdsassd@qq.com",
+                    "introduce": "我是一个边学习边分享的人。关于读书、关于影视剧、关于足球， 所学，所思，所感，所闻，分享一切有趣的、有用的。"
+                }
+                ```]] .. i,
             age = i,
             pagetype = f(i),
             pageid = i
         }
 
-        content = self:upsertToES(data) 
+        content = self:api_upsertPage(data)
     end
 
     return content
@@ -833,53 +841,17 @@ end
 
 
 function elastic_search:api_testContentHandler()
-    local content = [[
-        <!-- tags : cs1 pc music rock game -->
-        # 
-
-        ## 我是个非常热爱生活的人
-
-        ### 
-
-        **这是粗体**
-
-        *这是斜体*
-
-        - 表格
-
-        1. 哎哟厉害哦
-
-        > 闪电似的
-
-
-        | 这是表格| 表格信息 |
-        | -- | -- |
-        | ok | 厉害 |
-
-
-        ---
+    local content = [[]]
+        local params = {}
+        params.new_content, params.tags = self:content_handler(content)
+    -- return errors:wrap(nil,params)
+    return params.new_content
+end
 
 
 
-        [链接](/william0911/home1/hash4567)
-
-
-
-        ![图片]()
-
-
-
-        ```@wiki/js/bigfile
-        {
-            "fileId":"483","fileType":"audio/ogg",
-        "extraMsg":"horse.ogg","channel":"qiniu"
-        }
-        ```
-
-        ```
-
-        ```
-
+function elastic_search:api_testRender()
+    local content = mdwiki.render([[
         ```@wiki/js/resumeHeader
         {
             "backgroundImage": "",
@@ -890,9 +862,56 @@ function elastic_search:api_testContentHandler()
             "cellphone": "180*******",
             "email": "sdsdsassd@qq.com",
             "introduce": "我是一个边学习边分享的人。关于读书、关于影视剧、关于足球， 所学，所思，所感，所闻，分享一切有趣的、有用的。"
-        }
-        ```]]
-        local params = {}
-        params.content, params.tags = self:content_handler(content)
-    return errors:wrap(nil,params)
+        }]])
+
+        return content
 end
+
+function elastic_search:api_testMultiUpsert()
+    local upsert_to = "http://127.0.0.1:9200/keepwork/page/"
+    local f = function(i) if (i%5 ~= 0) then return "normal" else return "profile" end end
+    local data = {}
+    local finish_count
+    local reply = {}
+    local limit = 50
+    local times = 10
+    local err, data
+
+    for j = 1,times do
+        finish_count = 0
+        for i = 1, limit do
+            data = {
+                type = "page",
+                access_url = "localhost:8099/william/home/test" .. i,
+                url = "/william/home/test" .. i,
+                tags = {"tag".. i},
+                username = "william",
+                sitename  = "home",
+                pagename = "test" .. i,
+                create_time = ParaGlobal.GetDateFormat("yyyy-MM-dd ") .. ParaGlobal.GetTimeFormat("H:mm:ss ") .. "+0800",
+                content = "test content 测试一下" .. i,
+                age = i,
+                pagetype = f(i),
+                pageid = i
+            }
+
+            System.os.GetUrl({
+                url = upsert_to,
+                method = "POST",
+                json = true,
+                form = data
+            }, function(err, data) 
+                finish_count = finish_count + 1;
+                if (finish_count == (limit)) then
+                    resume(err, data)
+                end
+            end
+            );
+        end
+
+        err, data = yield()
+    end
+
+    return errors:wrap(err, data)
+end
+
