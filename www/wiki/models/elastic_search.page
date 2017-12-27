@@ -250,7 +250,7 @@ function elastic_search:api_upsertPage(params)
 end
 
 
---提取tags，处理content
+--提取tags，处理content(待完善)
 function elastic_search:content_handler(content)
     local new_content = content
     local tags = {}
@@ -268,9 +268,11 @@ function elastic_search:content_handler(content)
     end
 
     -- 去除md语法
-    content = string.gsub(content, "<!--[%w%W]+?-->", '', 1)
-    content = string.gsub(content, "[#%-%|%*>]+", '')
+    content = string.gsub(content, "<!%-%-[%w%W]-%-%->", '', 1)
+    content = string.gsub(content, "[#%-%|%*]+", '')
     content = string.gsub(content, "!-%[[%w%W]-%]%([%w%W]-%)", '')
+    content = string.gsub(content, "\n", ' ')
+    content = string.gsub(content, " +", ' ')
 
     new_content = mdwiki.render(content)
 
@@ -371,9 +373,9 @@ end
 
 -- 更新数据,只能通过id
 function elastic_search:updateById(params)
-    params.flag = "update"
-    log(params, true)
-    params.flag = nil
+    -- params.flag = "update"
+    -- log(params, true)
+    -- params.flag = nil
 
     if (not params._id) or (not params.type) or (params.type == "") then
         return errors:wrap(errors.REQUEST_PARAMS_ERROR)
@@ -429,9 +431,9 @@ function elastic_search:getBySingleField(params)
         params.access_url = nil
     end
 
-    params.flag = "getBySingleField"
-    log(params, true)
-    params.flag = nil
+    -- params.flag = "getBySingleField"
+    -- log(params, true)
+    -- params.flag = nil
 
     -- 精确搜索时使用filter提高搜索效率
     local query_table = {
@@ -738,9 +740,179 @@ function elastic_search:get_search_result(query_table, search_in)
 end
 
 
+--------------------------------------------rebuild scripts--------------------------------------------------
+--确保不误触发脚本
+local not_dumpped = false
+
+function elastic_search:api_resetDump()
+    not_dumpped = true
+    return errors:wrap(nil)
+end
+
+
+-- 迁移脚本
+function elastic_search:api_dump()
+    -- if (not not_dumpped) then
+    --     return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    -- end
+
+    local exported_data = self:export()
+    local data_list, scroll_id = self:data_list_generator(exported_data)
+    
+    while (#data_list > 0) do
+        self:import(data_list)
+        exported_data = self:export({scroll_id = scroll_id})
+        data_list, scroll_id = self:data_list_generator(exported_data)
+    end
+
+    not_dumpped = false 
+    return errors:wrap(nil,tb)
+end
+
+
+-- 导出原索引数据
+function elastic_search:api_export(params)
+    local params = params or {}
+    params.scroll_id = params.scroll_id or nil
+    local type = "page"
+    local search_in = format("http://127.0.0.1:9200/kwindex/%s/_search?scroll=1m", type)
+    local query_table = {
+            query = {
+                range = {
+                    create_time = {
+                        gte=  "2017-12-18 00:00:00 +0800",
+                        lt=   "2017-12-25 00:00:00 +0800"
+            }
+        }
+    },
+        sort = {"create_time"},
+        size = 1
+    }
+
+    if (params.scroll_id) then
+        query_table = {
+            scroll_id = params.scroll_id,
+            scroll = "1m"
+        }
+        search_in = "http://127.0.0.1:9200/_search/scroll"
+    end
+
+    -- log(query_table, true)
+
+    System.os.GetUrl({
+        url = search_in,
+        method = "GET", 
+        json = true,
+        form = query_table
+    }, resume)
+
+    local err, result = yield()
+
+    return result
+end
+
+
+-- 处理老数据，修改数据结构
+function elastic_search:data_list_generator(params)
+    if (params.rcode ~= 200) then
+        return errors:wrap(nil,params)
+    end
+
+    local data_list = {}
+    local scroll_id = params.data._scroll_id
+
+    if (params.data.hits) and (#params.data.hits.hits ~= 0) then
+        local hits, cleaned_data, source
+
+        hits = params.data.hits.hits
+
+        for i, data in ipairs(hits) do
+            source = data._source
+            cleaned_data = {
+                access_url = source.access_url,
+                url = source.url,
+                id = data._id,
+                user_name = source.username,
+                site_name = source.sitename,
+                page_name = source.pagename,
+                create_time = source.create_time,
+                page_type = "normal",
+            }
+
+            cleaned_data.content, cleaned_data.tags = self:content_handler(source.content or "")
+            cleaned_data.update_time = source.update_time or source.create_time
+
+            if (#source.tags ~= 0) then
+                cleaned_data.tags = source.tags
+            end
+
+            table.insert(data_list, cleaned_data)
+        end
+    end
+
+    return data_list, scroll_id
+end
+
+-- 导入新索引
+function elastic_search:import(data_list)
+    local upsert_to = "http://127.0.0.1:9200/keepwork_v2/page/_bulk"
+    local data_to_import = ""
+    local data_tostring
+    local tags
+
+    for i, data in ipairs(data_list) do
+        data_tostring = ''
+        for k, v in pairs(data) do
+            if (k == 'tags') then
+                tags = ''
+                for _, tag in ipairs(v) do
+                    tag = tags .. tag .. ','
+                end
+                
+                tags = '[' .. tags .. ']'
+                data_tostring = data_tostring .. format('"%s":%s,', k, tags)
+            else
+                if (k ~= "id") then
+                    data_tostring = data_tostring .. format('"%s":"%s",', k, v)
+                end
+            end
+        end
+
+        data_to_import = data_to_import .. format('{"index":{"_id":"%s"}}\n', data.id)
+        data_to_import = data_to_import .. format('{%s}\n', data_tostring)
+    end
+
+    data_to_import = string.gsub(data_to_import, "%,%}", "}")
+    data_to_import = string.gsub(data_to_import, "%,%]", "]")
+
+    System.os.GetUrl({
+        url = upsert_to,
+        -- method = "POST",
+        json = true,
+        postfields = data_to_import
+    }, resume)
+
+    return errors:wrap(yield())
+
+    -- return data_to_import
+end
 
 
 --------------------------------------------test code----------------------------------------------------------
+function elastic_search:api_testDump()
+    local exported_data = self:export()
+    local data_list, scroll_id = self:data_list_generator(exported_data)
+
+    for i = 1, 3 do
+        exported_data = self:export({scroll_id = scroll_id})
+        data_list, scroll_id = self:data_list_generator(exported_data)
+    end
+
+
+    return tostring(#data_list)
+end
+
+
 function elastic_search:api_testSearch()
     params = {}
     params.type = "page"
