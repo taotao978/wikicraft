@@ -1,0 +1,131 @@
+<?npl
+--[[
+
+]]
+
+
+include_once("./abstract/base.page")
+include_once("./elasticsearch.page")
+include_once("./site_data_source.page")
+
+local es_migrator = inherit(models.abstract.base, gettable("models.es_migrator"))
+local mdwiki = NPL.load('../helpers/md/mdwiki.lua')
+mdwiki.set_wiki_mod_path("../js/mod/")
+
+local es = models.elasticsearch:new()
+es:connect({host="localhost", port=9200})
+
+-- 爬取gitlab数据脚本
+function es_migrator:api_migrate()
+    local data = {}
+    local git_tree_api = ''
+    local git_blob_api = ''
+    local data_list = {}
+    local apiBaseUrl = 'http://git.keepwork.com/api/v4/projects/'
+
+    -- 获取数据源
+    local site_data_source = models.site_data_source:new()
+    site_data_source:db():find({_id={gt=0, limit=300000}}, resume)
+    local err, data_source_list = yield()
+    local remain_jobs = 0
+
+    for i, data_source in ipairs(data_source_list) do
+        if (data_source.isolateDataSource == 1) then
+            remain_jobs = remain_jobs + 1
+            git_tree_api = format("%s%d/repository/tree?recursive=true", apiBaseUrl, data_source.projectId)
+            System.os.GetUrl({
+                url = git_tree_api,
+                method = "GET",
+                json = true,
+            }, function(err, list)
+                for j, file in ipairs(list.data) do
+                    if (file.type == "blob") and (string.find(file.name, ".md")) and
+                    (file.name ~= "_theme.md") and (file.name ~= "_sidebar.md") and
+                    (file.name ~= "_header.md") and (file.name ~= "_footer.md") then
+                        remain_jobs = remain_jobs + 1
+                        git_blob_api = format("%s%d/repository/blobs/%s/raw", apiBaseUrl, data_source.projectId,file.id)
+                        System.os.GetUrl({
+                            url = git_blob_api,
+                            method = "GET",
+                            json = true,
+                        }, function(err, content)
+                            data = {
+                                user_name = data_source.username,
+                                site_name = data_source.sitename,
+                                page_type = "normal",
+                                url = string.gsub(file.path, ".md", ""),
+                                access_url = "http://keepwork.com/" .. string.gsub(file.path, ".md", ""),
+                                content = self:content_handler(content.data),
+                                -- content = content.data,
+                                tags = {}
+                            }
+                            remain_jobs = remain_jobs - 1
+                            resume(err, data)
+                        end)
+                    end
+                end
+                remain_jobs = remain_jobs - 1
+            end)
+        end
+    end
+
+    while (remain_jobs > 0) do
+        err, data = yield()
+        table.insert(data_list, data)
+        if (#data_list == 1000) then
+            self:import(data_list)
+            data_list = {}
+        end 
+    end
+
+    -- local tb = {data_list=data_list}
+    return self:import(data_list)
+    -- return errors:wrap(nil,tb)
+end
+
+
+-- 导入ES
+function es_migrator:import(data_list)
+    local data_to_import = ""
+    local data_tostring = ''
+    local tags = ''
+
+    for i, data in ipairs(data_list) do
+        data_tostring = ''
+        for k, v in pairs(data) do
+            if (k == 'tags') then
+                tags = ''
+                for _, tag in ipairs(v) do
+                    tag = tags .. tag .. ','
+                end
+                
+                tags = '[' .. tags .. ']'
+                data_tostring = data_tostring .. format('"%s":%s,', k, tags)
+            else
+                if (k ~= "id") then
+                    data_tostring = data_tostring .. format('"%s":"%s",', k, v)
+                end
+            end
+        end
+
+        data_to_import = data_to_import .. '{"index":{}}\n'
+        data_to_import = data_to_import .. format('{%s}\n', data_tostring)
+    end
+
+    data_to_import = string.gsub(data_to_import, "%,%}", "}")
+    data_to_import = string.gsub(data_to_import, "%,%]", "]")
+
+    -- return data_to_import
+    return es:bulk({data=data_to_import,index="keepwork_v3",type="page"})
+end
+
+
+--提取tags，处理content(待完善)
+function es_migrator:content_handler(content)
+    -- content = string.gsub(content, "<!%-%-[%w%W]-%-%->", '', 1)
+    content = string.gsub(content, "[#%-%|%*{}:]", '')
+    content = string.gsub(content, "[\n\\\b\f\r\t]", " ")    
+    content = string.gsub(content, "!-%[[%w%W]-%]%([%w%W]-%)", '')
+    -- content = string.gsub(content, " +", ' ')
+    return content
+end
