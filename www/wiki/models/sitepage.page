@@ -5,10 +5,14 @@ Author: wuxiangan
 Date: 2017/04/13
 ]]
 include_once("./abstract/base.page")
+include_once("./elasticsearch.page")
 
 -- 暂时不用
 local sitepage = inherit(models.abstract.base, gettable("models.sitepage"))
 sitepage.db_name = "sitepage"
+
+local es = models.elasticsearch:new()
+es:connect({host="localhost", port=9200})
 
 function sitepage:ctor() 
 	self:addfield("username","string")         -- username
@@ -55,4 +59,69 @@ function sitepage:api_deleteByUrl(params)
 	self:db():delete({["+url"]={params.url}}, resume)
 
 	return errors:wrap(yield())
+end
+
+
+function sitepage:api_insertOrUpdateToES(params)
+    params.index = "kwindex"
+    params.type = "page"
+    local page = {}
+
+    if ((not params.username) or (not params.sitename) or 
+        (not params.pagename) or (not params.access_url ) or
+        (not params.url) or (not params.pagetype)) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    -- 过滤不需要的参数
+    page.type = params.type
+    page.index = params.index
+    page.username = params.username
+    page.sitename = params.sitename
+    page.pagename = params.pagename
+    page.access_url = params.access_url
+    page.url = params.url
+    page.pagetype = params.pagetype
+    page.visibility = params.visibility
+
+    -- content tags 处理
+    if (page.visibility) and (page.visibility == "private") then
+        return errors:wrap(nil)
+    else
+        page.content, page.tags = self:content_handler(params.content)
+    end
+
+    -- 查询page是否已存在
+    local exist_page = es:findOne({index=params.index, type=params.type, access_url=params.access_url})
+    if (#exist_page.data.hits.hits > 0) then
+        params.id = exist_page.data.hits.hits[1]._id
+        return es:updateOne(params)
+    end
+
+    return es:insertOne(params)
+end
+
+
+function sitepage:content_handler(content)
+    content = string.gsub(content, "[#%-%|%*{}:%s]", '')
+    content = string.gsub(content, "!-%[[%w%W]-%]%([%w%W]-%)", '')
+    return content
+end
+
+
+function sitepage:api_deleteInES(params)
+    params.index = "kwindex"
+    params.type = "page"
+
+    if (not params.access_url) then
+        return errors:wrap(errors.REQUEST_PARAMS_ERROR)
+    end
+
+    local exist_page = es:findOne({index=params.index, type=params.type, access_url=params.access_url})
+    if (#exist_page.data.hits.hits > 0) then
+        params.id = exist_page.data.hits.hits[1]._id
+        return es:deleteOne(params)
+    end
+
+    return errors:wrap(nil)
 end
