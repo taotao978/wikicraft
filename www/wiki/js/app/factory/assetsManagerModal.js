@@ -4,24 +4,27 @@
  */
 
 // how to use
-// config.services.imageManagerModal({
+// config.services.assetsManagerModal({
 //    title: '选择图片',
 //    modalPositionCenter: true,
 //    nav: 'myImages'
 // }, function(url) {
-//    //handle url
+//    console.log(url); //handle url
 // });
 
 define([
     'app',
+    'qiniu',
     'angular',
     'helper/util',
     'helper/dataSource',
     'bluebird',
-    'text!html/partial/imageManagerModal.html',
-], function (app, angular, util, dataSource, Promise, htmlContent) {
-    app.registerController("imageManagerModalController", ['$scope', 'options', 'gitlab', function ($scope, options, gitlab) {
+    'text!html/partial/assetsManagerModal.html',
+], function (app, qiniu, angular, util, dataSource, Promise, htmlContent) {
+    app.registerController("assetsManagerModalController", ['$scope', '$sce', 'options', 'gitlab', function ($scope, $sce, options, gitlab) {
         var toggleNavCount = 0;
+        var qiniuFileUploadedCallbacks = [];
+
         $scope.currentNav = options.nav || 'myImages';
         $scope.title = options.title || '选择图片';
         $scope.currentPage = options.currentPage;
@@ -32,6 +35,9 @@ define([
         $scope.imgContent = null;
         $scope.imageList = [];
         $scope.choosedItems = [];
+
+        $scope.$watch('$viewContentLoaded', function() {
+        });
 
         openMyImages();
 
@@ -57,6 +63,34 @@ define([
             return $scope.choosedItems.indexOf(item) > -1;
         }
 
+        function getNakedUrlWithoutQueryAndHash(url) {
+            return (url && url.split && url.split(/\?|\#/)[0] || '');
+        }
+
+        $scope.isUrlVideo = function(url) {
+            var result = /(mp4|mov|amv|avi)$/.test(getNakedUrlWithoutQueryAndHash(url));
+            return result;
+        }
+
+        $scope.isUrlImage = function(url) {
+            var result = /(jpe?g|png|svg|gif|bmp)$/.test(getNakedUrlWithoutQueryAndHash(url));
+            return result;
+        }
+
+        $scope.isValidUrl = function(url) {
+            return $scope.isUrlImage(url) || $scope.isUrlVideo(url);
+        }
+
+        $scope.getUrlPreviewDOM = function(url) {
+            if ( $scope.isUrlVideo(url) )
+                return $sce.trustAsHtml('<video src="' + url + '"></video>');
+
+            if ( $scope.isUrlImage(url) )
+                return $sce.trustAsHtml('<img src="' + url + '" />');
+
+            return '';
+        }
+
         function openMyImages() {
             getAllImageList();
         }
@@ -66,9 +100,23 @@ define([
 
             var currentDataSource = getCurrentDataSource();
             currentDataSource && currentDataSource.getImageList(function (data){
-                $scope.imageList = data;
+                myImagesAddImages(data);
+                getAllVideoAndImageBigFiles();
             }, function(err) {
                 console.error(err);
+                getAllVideoAndImageBigFiles();
+            });
+        }
+
+        function getAllVideoAndImageBigFiles() {
+            util.post(config.apiUrlPrefix + "bigfile/getByUsername",{pageSize:100000}, function(data){
+                data = data || {};
+                var mediaUrlList = (data.filelist || []).filter(function(item) {
+                    return item && item.file && item.file.download_url && $scope.isValidUrl(item.file.download_url);
+                }).map(function(item) {
+                    return item.file.download_url;
+                });
+                myImagesAddImages(mediaUrlList);
             });
         }
 
@@ -83,10 +131,14 @@ define([
             xiuxiuReady(function(xiuxiu) {
                 $scope.xiuxiuIsReady = true;
                 xiuxiu.embedSWF("imageManagerXiuxiuContainer", 3, "100%", "100%");
-                xiuxiu.onInit = function() {
+                var loadingAutoHideTimer = setTimeout(function() {
                     config.loading.hide();
+                }, 2000);
+                xiuxiu.onInit = function() {
                     xiuxiu.setUploadType(3);
-                    xiuxiu.loadPhoto(url);
+                    url && xiuxiu.loadPhoto(url);
+                    clearTimeout(loadingAutoHideTimer);
+                    config.loading.hide();
                 }
                 xiuxiu.onSaveBase64Image = function(data, fileName, fileType, id) {
                     // alert("保存为base64图片,大小:" + data.length + ",文件名:" + fileName + ",类型:" + fileType);
@@ -184,10 +236,77 @@ define([
             $scope.$dismiss('Canceled')
         }
 
-        
+        function getQiniuUploader(cb, errcb) {
+            if ($scope.qiniuUploader) {
+                cb($scope.qiniuUploader);
+            } else {
+                getNewQiniuUploader(function(uploader) {
+                    $scope.qiniuUploader = uploader;
+                    cb(uploader);
+                }, errcb);
+            }
+        }
+
+        function getNewQiniuUploader(cb, errcb) {
+            var option = {
+                browse_button: "qiniuUploadAssetsBtn",
+                unique_names: true,
+                auto_start: false,
+                get_new_uptoken: false,
+                // uptoken: 'LYZsjH0681n9sWZqCM4E2KmU6DsJOE7CAM4O3eJq:jlDU6EFiXBAcVYCH-rGtuAIqmWo=:eyJzY29wZSI6ImtlZXB3b3JrLWRldiIsImNhbGxiYWNrVXJsIjoiaHR0cDovLzEyMS4xNC4xMTcuMjUyOjg5MDAvYXBpL3dpa2kvbW9kZWxzL3Fpbml1L2NhbGxiYWNrIiwiY2FsbGJhY2tCb2R5IjoidWlkPSQoeDp1aWQpJnNpemU9JChmc2l6ZSkmYnVja2V0PSQoYnVja2V0KSZrZXk9JChrZXkpIiwiZGVhZGxpbmUiOjE1MTU2NjY2NDJ9',
+                uptoken_url: '/api/wiki/models/qiniu/uploadToken',
+                domain: 'ov62qege8.bkt.clouddn.com',
+                chunk_size: "4mb",
+                filters:{},
+                x_vars: {
+                    uid: ''
+                },
+                init: {
+                    FilesAdded: function(up, files) {
+                        var self = this;
+                        console.log('FilesAdded: ', up, files);
+                        self.start();
+                    },
+                    BeforeUpload: function(up, file) {
+                        console.log('qiniuUploader BeforeUpload: ', up, file);
+                    },
+                    UploadProgress: function(up, file) {
+                        console.log('qiniuUploader UploadProgress: ', up, file);
+                    },
+                    FileUploaded: function(up, file, response) {
+                        console.log('qiniuUploader FileUploaded: ', up, file, response);
+                        qiniuFileUploadedCallbacks.forEach(function(callback) {
+                            callback(up, file, response);
+                        });
+                    },
+                    Error: function(up, err, errTip) {
+                        console.log('qiniuUploader Error: ', up, err, errTip);
+                    },
+                    UploadComplete: function() {
+                        console.log('qiniuUploader UploadComplete');
+                    }
+                }
+            };
+
+            getQiniuUid(function(uid) {
+                option.x_vars.uid = uid;
+                var uploader = Qiniu.uploader(option);
+                cb && cb(uploader);
+            }, errcb);
+        }
+
+        function getQiniuUid(cb, errcb) {
+            // return cb('b3affaa33c31b997cb7902809ef194da'); //for test
+            util.get(config.apiUrlPrefix + 'qiniu/getUid',{}, function(data){
+                (data && data.uid)
+                    ? (cb && cb(data.uid)) 
+                    : (errcb && errcb());
+            }, errcb);
+        }
+
         function uploadImageFiles(files) {
             var files = files && files.length && Array.prototype.filter.call(files, function(file) {
-                return /^image/.test(file.type);
+                return /^(image|video)/.test(file.type);
             });
 
             if (!(files && files.length)) return Promise.reject('No files to upload!');
@@ -215,7 +334,12 @@ define([
         }
 
         function myImagesAddImages(urls) {
-            for(var key in urls) $scope.imageList.push({url: urls[key]});
+            for(var key in urls) {
+                var url = urls[key];
+                (url.url && (url = url.url));
+                typeof url === 'string' && $scope.imageList.push({url: url});
+            }
+            util.$apply($scope);
         }
 
         function resetFilePickerInput() {
@@ -224,6 +348,74 @@ define([
         }
 
         function uploadImageFile(file, successCallback, errorCallback) {
+            console.log('uploadImageFile: ', file);
+            var size10M = 10 * 1024 * 1024;
+
+            file.size < size10M
+                ? uploadFileThroughGit(file, successCallback, errorCallback)
+                : uploadFileThroughQiniu(file, successCallback, errorCallback);
+        }
+
+        function uploadFileThroughQiniu(file, successCallback, errorCallback) {
+            getQiniuUploader(function(uploader) {
+                var callbackFn = function(up, uploadedFile, res) {
+                    var uploadedOriginalFile = uploadedFile.getNative();
+                    if (file === uploadedOriginalFile) {
+                        var info = JSON.parse(res.response);
+                        logBigfileIntoDatabaseAfterUploadFileThroughQiniu({
+                            filename: uploadedFile.name,
+                            domain: up.getOption('domain'),
+                            key: info.key,
+                            size: uploadedFile.size,
+                            type: uploadedFile.type,
+                            hash: info.hash, //useless? what's this!
+                            channel: "qiniu"
+                        }, function() {
+                            getDownloadUrlByKey(info.key, successCallback, errorCallback);
+                        }, errorCallback);
+                        qiniuFileUploadedCallbacks.splice(qiniuFileUploadedCallbacks.indexOf(callbackFn), 1);
+                    }
+                };
+                qiniuFileUploadedCallbacks.push(callbackFn);
+                uploader.addFile(file);
+
+                //todo: check uploader is inited?
+                setTimeout(function() {
+                    uploader.start();
+                }, 300);
+            });
+        }
+
+        function getDownloadUrlByKey(fileKey, successCallback, errorCallback) {
+            util.get(config.apiUrlPrefix + "bigfile/getDownloadUrlByKey", {
+                key: fileKey
+            }, successCallback, errorCallback);
+        }
+
+        function logBigfileIntoDatabaseAfterUploadFileThroughQiniu(params, successCallback, errorCallback) {
+            // var params = {
+            //     filename:file.name,
+            //     domain:domain,
+            //     key:info.key || file.target_name,
+            //     size:file.size,
+            //     type:file.type,
+            //     hash:info.hash, //useless? what's this!
+            //     channel:"qiniu"
+            // };
+            util.post(config.apiUrlPrefix + 'bigfile/upload', params, function(data){
+                successCallback && successCallback(data);
+            }, function(){
+                deleteFileOnQiniuByKey(params.key, errorCallback, errorCallback);
+            });
+        }
+
+        function deleteFileOnQiniuByKey(key, successCallback, errorCallback) {
+            util.post(config.apiUrlPrefix + "qiniu/deleteFile", {
+                key: key
+            }, successCallback, errorCallback);
+        }
+
+        function uploadFileThroughGit(file, successCallback, errorCallback) {
             var fileReader = new FileReader();
             fileReader.onload = function () {
                 var imgContent = fileReader.result;
@@ -253,12 +445,12 @@ define([
         }
     }]);
 
-    app.factory('imageManagerModal', ['$uibModal', function ($uibModal) {
-        function imageManagerModal(options, successCallback, errorCallback) {
+    app.factory('assetsManagerModal', ['$uibModal', function ($uibModal) {
+        function assetsManagerModal(options, successCallback, errorCallback) {
             return new Promise(function(resolve, reject) {
                 $uibModal.open({
                     template: htmlContent,
-                    controller: 'imageManagerModalController',
+                    controller: 'assetsManagerModalController',
                     size: 'lg',
                     windowClass: 'image-manager-popup' + ((options && options.modalPositionCenter) ? ' modal-position-center' : ''),
                     resolve: {
@@ -273,6 +465,6 @@ define([
                 });
             });
         }
-        return imageManagerModal;
+        return assetsManagerModal;
     }]);
 });
