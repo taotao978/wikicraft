@@ -29,6 +29,7 @@ define([
         '$http',
         '$auth',
         '$compile',
+        '$translate',
         'Account',
         'Message',
         'github',
@@ -37,7 +38,27 @@ define([
         'confirmDialog',
         'realnameVerifyModal',
         'datatreeEditorModal',
-        function ($scope, $rootScope, $sce, $location, $anchorScroll, $http, $auth, $compile, Account, Message, github, modal, gitlab, confirmDialog, realnameVerifyModal, datatreeEditorModal) {
+        'imageManagerModal',
+        function (
+            $scope,
+            $rootScope,
+            $sce,
+            $location,
+            $anchorScroll,
+            $http,
+            $auth,
+            $compile,
+            $translate,
+            Account,
+            Message,
+            github,
+            modal,
+            gitlab,
+            confirmDialog,
+            realnameVerifyModal,
+            datatreeEditorModal,
+            imageManagerModal
+        ) {
             //console.log("mainController");
             
             // 初始化基本信息
@@ -64,7 +85,8 @@ define([
                     loading:loading,
                     confirmDialog:confirmDialog,
                     realnameVerifyModal:realnameVerifyModal,
-                    datatreeEditorModal:datatreeEditorModal
+                    datatreeEditorModal:datatreeEditorModal,
+                    imageManagerModal:imageManagerModal
                 };
 
                 util.setAngularServices({
@@ -93,7 +115,8 @@ define([
                 $rootScope.user = Account.getUser();
                 $rootScope.userinfo = $rootScope.user;
 				$rootScope.frameHeaderExist = true;
-				$rootScope.frameFooterExist = true;
+                $rootScope.frameFooterExist = true;
+                $rootScope.translate = $translate.instant.bind($translate);
                 if (config.isLocal()) {
                     $rootScope.frameHeaderExist = true;
                     $rootScope.frameFooterExist = true;
@@ -253,16 +276,10 @@ define([
                     util.http("POST", config.apiUrlPrefix + "website/getDetailInfo", {
                         username: urlObj.username,
                         sitename: urlObj.sitename,
-                        pagename: urlObj.pagename,
+                        pagename: urlObj.pagename || 'index',
 						url:urlObj.pagepath,
                     }, function (data) {
                         data = data || {};
-
-                        if (!urlObj.pagename) {
-                            urlObj.pagename = data.siteinfo.defaultPage || "index"
-                            urlObj.pagepath += urlObj.pagename
-                        }
-
                         // 这三种基本信息根化，便于用户页内模块公用
                         $rootScope.userinfo = data.userinfo;
                         $rootScope.siteinfo = data.siteinfo || {};

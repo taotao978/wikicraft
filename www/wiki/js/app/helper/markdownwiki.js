@@ -271,7 +271,7 @@ define([
             },
             applyModParams: function (modParams) {
 				var pos = blockCache.block.textPosition;
-                //console.log(modParams);
+				console.log(modParams);
                 if (!modParams || !editor || !mdwiki.options.editorMode) {
                     return;
                 }
@@ -280,7 +280,7 @@ define([
 					//modParams = angular.toJson(modParams, 4);
 					modParams = mdconf.jsonToMd(modParams);
                 }
-				console.log(modParams, pos);
+				//console.log(modParams, pos);
                 editor.replaceRange(modParams + '\n', {line: pos.from + 1, ch: 0}, {
                     line: pos.to - 1,
                     ch: 0
@@ -293,17 +293,28 @@ define([
 				}
 
 				var self = this;
+				var keywordMap = {
+					"is_leaf":true,
+					"order":true,
+					"type":true,
+					"editable":true,
+					"is_card_show":true,
+					"is_mod_hide":true,
+					"require":true,
+					"name":true,
+					"list":true, // 针对列表 不处理
+				}
+
 				//console.log(datas);
 				if (datas.is_leaf == true) {
 					datas.type = datas.type || "text";
 					data = data || {};
 					if (datas.require) {
-						if (datas.type == "text") {
-							data.text = data.text || datas.text;
-						}
-						if (datas.type == "link") {
-							data.text = data.text || datas.text;
-							data.href = data.href || datas.href;
+						for (var key in datas) {
+							if (keywordMap[key] || typeof(datas[key]) == "object") {
+								continue;
+							}
+							data[key] = data[key] || datas[key];
 						}
 						if (datas.type == "list") {
 							if (!angular.isArray(data.list)) {
@@ -315,19 +326,14 @@ define([
 						}
 					}
 					if (hideDefauleValue) {
-						if (datas.type == "text" && datas.text == data.text) {
-							delete data.text;
-						}
-
-						if (datas.type == "link") {
-							if (data.text == datas.text) {
-								delete data.text;
+						for (var key in datas) {
+							if (keywordMap[key]) {
+								continue;
 							}
-							if (data.href == datas.href) {
-								delete data.href;
+							if (typeof(key) != "object" && data[key] == datas[key]) {
+								delete data[key];
 							}
 						}
-
 						if (datas.type == "list") {
 							// 列表不作默认隐藏
 						}
@@ -354,7 +360,7 @@ define([
 								} else {
 									//datas = angular.merge(datas, data);
 								}
-								datas.is_show = data.is_show;
+								datas.is_card_show = data.is_card_show;
 							}
 						//}
 						datas.id = util.getId();
@@ -418,8 +424,12 @@ define([
 					var oldPos = oldWikiBlock.blockCache.block.textPosition;
 					var pos = self.blockCache.block.textPosition;
 					if (oldPos.from == pos.from) {
-						moduleEditorParams.wikiBlock = self;
-						console.log("更新wikiblock");
+                        moduleEditorParams.wikiBlock = self;
+                        $("#" + self.containerId).addClass("active");
+						if (moduleEditorParams.show_type == "design") {
+							moduleEditorParams.updateEditorObj(self.format_params_template);
+						}
+						console.log("更新wikiblock", moduleEditorParams);
 					}
 				}
 
@@ -440,6 +450,7 @@ define([
 						return;
 					}
 					if ($event) {
+                        $event.preventDefault();
 						$event.stopPropagation();
 					}
 					moduleEditorParams.selectObj = obj && obj.$kp_datas;
@@ -466,6 +477,7 @@ define([
 						obj = self.format_params_template;
                     }
                     moduleEditorParams.wikiBlock = self;
+                    moduleEditorParams.activeContainerId = self.containerId;
                     
                     $(".mod-container.active").removeClass("active");
                     self.blockCache.domNode.addClass("active");
@@ -519,16 +531,16 @@ define([
 					// });
 				}
 
-				if (moduleEditorParams.is_show && moduleEditorParams.wikiBlock && editor) {
-					var cursor_pos = editor.getCursor();
-					var cursor_line_no = cursor_pos ? cursor_pos.line : -1;
-					var pos = blockCache.block.textPosition;
-					if (cursor_line_no > pos.from && cursor_line_no < pos.to) {
-						//scope.viewEditorClick();
-						moduleEditorParams.wikiBlock = self;
-						console.log("更新wikiblock");
-					}
-				}
+				//if (moduleEditorParams.is_show && moduleEditorParams.wikiBlock && editor) {
+					//var cursor_pos = editor.getCursor();
+					//var cursor_line_no = cursor_pos ? cursor_pos.line : -1;
+					//var pos = blockCache.block.textPosition;
+					//if (cursor_line_no > pos.from && cursor_line_no < pos.to) {
+						////scope.viewEditorClick();
+						//moduleEditorParams.wikiBlock = self;
+						//console.log("更新wikiblock");
+					//}
+				//}
 			},
         };
 		blockCache.wikiBlockParams = wikiBlockParams;
@@ -772,11 +784,20 @@ define([
 				}
 			}
 			if (curBlock && curBlock.blockCache.isWikiBlock) {
+                var moduleEditorParams = config.shareMap.moduleEditorParams || {};
+                var moduleContainerId = moduleEditorParams.activeContainerId;
+                var curContainerId = curBlock.blockCache.containerId;
+                var isContainerIdChange = (moduleContainerId != curContainerId);
+                if (!isContainerIdChange) {
+                    return;
+                }
 				// wiki mod todo
 				curBlock.blockCache.wikiBlockParams.scope && curBlock.blockCache.wikiBlockParams.scope.viewEditorClick(curBlock.blockCache.containerId);	
 
 			} else {
-				// 非wiki mod todo
+                // 非wiki mod todo
+                var moduleEditorParams = config.shareMap.moduleEditorParams || {};
+                moduleEditorParams.activeContainerId = "";
 			}
 			//console.log(cur_line);
 			//console.log(mdwiki.blockList);
@@ -936,6 +957,11 @@ define([
 		mdwiki.templateMatch = function(wikiBlock) {
 			var modParams = wikiBlock.modParams;
 			var pageinfo = util.getAngularServices().$rootScope.pageinfo;
+
+			// 临时页做全匹配
+			if (!pageinfo) {
+				return true;
+			}
 
 			var urlPrefix = "/" + pageinfo.username + "/" + pageinfo.sitename + "/";
 			var pagePath = pageinfo.url.substring(urlPrefix.length);

@@ -23,13 +23,32 @@ define([
 		self.fields.push(field);	
 	}
 
-	app.registerController("moduleEditorController", ['$scope', '$rootScope', function($scope, $rootScope){
+	app.registerController("moduleEditorController", ['$scope', '$rootScope', '$uibModal', function($scope, $rootScope, $uibModal){
 		var design_list = [];
 		var lastSelectObj = undefined;
         var editor;
         var designViewWidth = 350, win;
         var lineClassesMap = [];
         var fakeIconDom = [];
+        $scope.filelist = [];
+        $scope.linkFilter = "";
+
+        var getFileList = function(){
+            var username = $scope.user.username;
+            var dataSourceList = dataSource.getDataSourceList(username);
+            for (var i = 0; i < (dataSourceList || []).length; i++) {
+				var siteDataSource = dataSourceList[i];
+				siteDataSource.getTree({path:'/'+ username}, function (data) {
+					for (var i = 0; i < (data || []).length; i++) {
+						if (data[i].pagename.indexOf(".gitignore") >= 0) {
+							continue;
+						}
+						$scope.filelist.push(data[i]);
+                    }
+				});
+			}
+        }
+			
 		// 转换数据格式
 		function get_order_list(obj){
 			//console.log(obj);
@@ -77,7 +96,9 @@ define([
 
 		// 隐藏事件
 		$scope.click_hide = function(data) {
-            data.is_show = angular.isUndefined(data.is_show) ? "false":!data.is_show;
+            var changeData = data.data;
+            changeData.is_mod_hide = !changeData.is_mod_hide;
+            config.shareMap.moduleEditorParams.wikiBlock.modParams[data.$kp_key] = changeData;
             applyAttrChange();
 		}
 
@@ -99,7 +120,6 @@ define([
                 title: data.name, 
                 keys: [
                     {key:'url', name: '链接', placeholder:"请输入链接"},
-                    {key:'note', name: '备注', placeholder:"请输入备注"},
                 ], 
                 showLocation: true, 
                 datatree: data.text
@@ -110,6 +130,133 @@ define([
             }, function(err){
                 console.log(err);
             });
+        }
+
+        // 打开绘图板
+        $scope.openBoard = function(data){
+            // 画板
+            console.log("打开绘图板");
+        }
+
+        // 多行文本弹窗
+        $scope.openMultiText = function(data){
+            $scope.editingData = data;
+            $uibModal.open({
+                templateUrl: config.htmlPath + "editMultiText.html",
+                controller: "multiTextController",
+                size: "multi-text",
+                scope: $scope
+            }).result.then(function(result){
+                console.log(result);
+                applyAttrChange();
+                // $scope.editingData.text = result;
+            });
+        }
+
+        // 图库弹窗
+        $scope.showImageModal = function(data){
+            console.log(data);
+            config.services.imageManagerModal({
+                title: '选择图片',
+                nav: 'myImages' ,//or 'internetImage' or 'beautifyImage'
+                modalPositionCenter: true,
+                currentPage: {
+                    username: $scope.userinfo.username,
+                    sitename: $scope.userinfo.sitename
+                }
+            }, function(url) {
+                //handle url
+                console.log(data);
+                data.text = url;
+                applyAttrChange();
+            });
+        }
+
+        $scope.setItem = function(data, type){
+            switch (type) {
+                case "image":
+                    data.mediaType = type;
+                    break;
+                case "video":
+                    data.mediaType = type;
+                    break;
+                default:
+                    data.mediaType = "image";
+                    break;
+            }
+        }
+
+        $scope.setLink = function(key, data){
+            $uibModal.open({
+                templateUrl: config.htmlPath + "editorInsertLink.html",
+                controller: "linkCtrl",
+            }).result.then(function (provider) {
+                if (provider == "link") {
+                    var link = $rootScope.link;
+                    data[key] = link.url;
+                    applyAttrChange();
+                }
+            }, function (text, error) {
+                console.log('text:' + text);
+                console.log('error:' + error);
+                return;
+            });
+        }
+
+        $scope.setShowResult = function(value){
+            setTimeout(function(){
+                $scope.showResult = value;
+                $scope.linkFilter = "";
+            });
+        }
+
+        $scope.urlSelected = function(item, modal, data){
+            data.href = item.url;
+            applyAttrChange();
+        }
+
+        $scope.selectUrl = function(data, url){
+            data.href = url;
+            $scope.showResult = false;
+            $scope.linkFilter = "";
+            applyAttrChange();
+        }
+
+        $scope.showAllLink = function(){
+            $scope.linkFilter = $scope.user.username;
+            $scope.showResult = true;
+            setTimeout(function(){
+                $(document).bind("click.allLink", function(e){
+                    $scope.showResult = false;
+                    $scope.linkFilter = "";
+                    $scope.$apply();
+                    $(document).unbind("click.allLink");
+                });
+            });
+        }
+
+        $scope.getLinkTarget = function(data){
+            if (!data.target) {
+                data.target = "_blank";
+            }
+            var linkTarget;
+            switch (data.target) {
+                case "_self":
+                    linkTarget = "本窗口打开";
+                    break;
+                default:
+                    linkTarget = "新窗口打开";
+                    break;
+            }
+            return linkTarget;
+        }
+
+        $scope.setLinkTarget = function(data, value){
+            if (value == "_blank" || value == "_self") {
+                data.target = value;
+            }
+            data.target = data.target || "_blank";
+            applyAttrChange();
         }
 
 		$scope.close = function() {
@@ -124,7 +271,7 @@ define([
 					//console.log(modParams);
 					var paramsTemplate = angular.copy(moduleEditorParams.wikiBlock.params_template);
 					//console.log(paramsTemplate, modParams);
-					modParams = moduleEditorParams.wikiBlock.formatModParams("", paramsTemplate, modParams, true);
+					modParams = moduleEditorParams.wikiBlock.formatModParams("", paramsTemplate, modParams, false);
 					//console.log(modParams);
 					moduleEditorParams.wikiBlock.applyModParams(modParams);
 					//config.shareMap.moduleEditorParams = undefined;
@@ -147,9 +294,10 @@ define([
                 //console.log(modParams);
                 var paramsTemplate = angular.copy(moduleEditorParams.wikiBlock.params_template);
                 //console.log(paramsTemplate, modParams);
-                modParams = moduleEditorParams.wikiBlock.formatModParams("", paramsTemplate, modParams, true);
+                modParams = moduleEditorParams.wikiBlock.formatModParams("", paramsTemplate, modParams, false);
                 //console.log(modParams);
                 moduleEditorParams.wikiBlock.applyModParams(modParams);
+                setFakeIconPosition();
                 //config.shareMap.moduleEditorParams = undefined;
             }
         }
@@ -162,8 +310,10 @@ define([
 			var moduleEditorParams = config.shareMap.moduleEditorParams || {};
 			var modParams = $scope.styles[index];
             console.log(modParams);
+            moduleEditorParams.wikiBlock.modParams.design.text = modParams.design.text;
             $scope.selectedDesign = modParams.design.text;
 			if (moduleEditorParams.wikiBlock) {
+                moduleEditorParams.renderMod = "editorToCode";
 				moduleEditorParams.wikiBlock.applyModParams(modParams);
 			}
         }
@@ -240,20 +390,30 @@ define([
                 }, 10);
                 return;
             }
+
+            $(".ui-select-dropdown.dropdown-menu").on("mousewheel", function(event){
+                console.log(event);
+                event.stopPropagation();
+            });
+
             swiper[type].destroy && swiper[type].destroy(true, true);
             
             swiper[type] = new Swiper("#"+swiperContainerId,{
                 nextButton: '#' + swiperContainerId + ' .swiper-button-next',
                 prevButton: '#' + swiperContainerId + ' .swiper-button-prev',
                 scrollbar: '#' + swiperContainerId + ' .swiper-scrollbar',
+                direction : 'horizontal',
+                calculateHeight:true,
                 scrollbarHide: false,
                 slidesPerView: 'auto',
                 mousewheelControl: true,
+                resistanceRatio: 0,         // 不可脱离边缘
+                noSwiping: true,            // 在slide上增加类名 "swiper-no-swiping"，该slide无法拖动
             });
         }
 
         function setFakeIconPosition(){
-            fakeIconDom = fakeIconDom.length > 0 ? fakeIconDom : $(".fake-icon");
+            fakeIconDom = fakeIconDom.length > 0 ? fakeIconDom : $(".mod-container.active .fake-icon");
             if (fakeIconDom.length <= 0) {
                 setTimeout(function(){
                     setFakeIconPosition();
@@ -266,6 +426,7 @@ define([
             fakeIconDom.css({
                 "left" : leftDistance / scaleSize
             });
+            fakeIconDom = [];
         }
 
 		function init() {
@@ -273,9 +434,15 @@ define([
 			var moduleEditorParams = config.shareMap.moduleEditorParams || {};
 			config.shareMap.moduleEditorParams = moduleEditorParams;
 			//moduleEditorParams.$scope = $scope;
+			
+			moduleEditorParams.updateEditorObj = function(obj) {
+                $scope.editorDatas = get_order_list(obj);
+                util.$apply();
+			}
+
 			moduleEditorParams.setEditorObj = function(obj) {
                 setFakeIconPosition();
-				moduleEditorParams = config.shareMap.moduleEditorParams || {};
+                moduleEditorParams = config.shareMap.moduleEditorParams || {};
                 var selectObj = moduleEditorParams.selectObj;
 				if (selectObj) {
 					setTimeout(function(){
@@ -287,6 +454,7 @@ define([
                 var blockLineNumTo = moduleEditorParams.wikiBlock.blockCache.block.textPosition.to;
                 setCodePosition(blockLineNumFrom, blockLineNumTo);
 
+				moduleEditorParams.show_type = "editor";
 				$scope.show_type = "editor";
 
 				if (obj.is_leaf) {
@@ -313,12 +481,13 @@ define([
                 moduleEditorParams = config.shareMap.moduleEditorParams || {};
                 $scope.selectedDesign = moduleEditorParams.wikiBlock.modParams.design.text;
 				var style_list = moduleEditorParams.wikiBlock.styles || [];
+				moduleEditorParams.show_type = "design";
 				$scope.show_type = "design";
 				$scope.styles = [];
 				$scope.designDatas = [];
 				for (var i = 0; i < style_list.length; i++) {
 					var modParams = angular.copy(moduleEditorParams.wikiBlock.modParams);
-					modParams = angular.merge(modParams, style_list[i]);
+					modParams = angular.extend(modParams, angular.copy(style_list[i]));
                     $scope.styles[i] = modParams;
 					var md = markdownwiki({mode:"preview", html:true, use_template:false});
                     var text = '```' + moduleEditorParams.wikiBlock.cmdName + "\n" + config.services.mdconf.jsonToMd(modParams) + "\n```\n";
@@ -330,7 +499,7 @@ define([
                     }
 
                     $scope.designDatas.push(design);
-                    setDesignViewWidth();
+                    // setDesignViewWidth();
                 }
                 initSwiper("design");
             }
@@ -345,11 +514,22 @@ define([
             
 			// $scope.show_type = "editor";
             $scope.datas_stack = [];
+            getFileList();
 		}
 
 		$scope.$watch("$viewContentLoaded", init);
 	}]);
 
+    app.registerController("multiTextController", ["$scope", "$uibModalInstance", function($scope, $uibModalInstance){
+        console.log("multiTextController");
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        }
+
+        $scope.finishEdit = function(){
+            $uibModalInstance.close('finish');
+        }
+    }])
 
 	return htmlContent;
 })
